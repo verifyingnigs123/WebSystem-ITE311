@@ -12,7 +12,7 @@
 
     <div class="container mt-5">
         <h1>Welcome to the Homepage</h1>
-        <p>This is your new CodeIgniter 4 template using Bootstrap.</p>
+        <p>This is your new CodeIgniter 4 template using Bootstrap. BY(RAPH JOHN VISAYAS)</p>
     </div>
 </body>
 </html>
