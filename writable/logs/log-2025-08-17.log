@@ -118,3 +118,79 @@ Stack trace:
 #11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+CRITICAL - 2025-08-17 15:36:17 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/header.php"
+[Method: GET, Route: about]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/header.php')
+ 2 SYSTEMPATH\View\View.php(475): CodeIgniter\View\View->render('partials/header', null, true)
+ 3 APPPATH\Views\about.php(1): CodeIgniter\View\View->include('partials/header')
+ 4 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\ITE311-VISAYAS\\app\\Views\\about.php')
+ 5 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('about', [], true)
+ 7 APPPATH\Controllers\Home.php(14): view('about')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->about()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\ITE311-VISAYAS\\public\\index.php')
+CRITICAL - 2025-08-17 15:36:17 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/header.php"
+[Method: GET, Route: contact]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/header.php')
+ 2 SYSTEMPATH\View\View.php(475): CodeIgniter\View\View->render('partials/header', null, true)
+ 3 APPPATH\Views\contact.php(1): CodeIgniter\View\View->include('partials/header')
+ 4 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\ITE311-VISAYAS\\app\\Views\\contact.php')
+ 5 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('contact', [], true)
+ 7 APPPATH\Controllers\Home.php(19): view('contact')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->contact()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\ITE311-VISAYAS\\public\\index.php')
+CRITICAL - 2025-08-17 15:36:22 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/header.php"
+[Method: GET, Route: contact]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/header.php')
+ 2 SYSTEMPATH\View\View.php(475): CodeIgniter\View\View->render('partials/header', null, true)
+ 3 APPPATH\Views\contact.php(1): CodeIgniter\View\View->include('partials/header')
+ 4 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\ITE311-VISAYAS\\app\\Views\\contact.php')
+ 5 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('contact', [], true)
+ 7 APPPATH\Controllers\Home.php(19): view('contact')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->contact()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\ITE311-VISAYAS\\public\\index.php')
+CRITICAL - 2025-08-17 15:36:25 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/header.php"
+[Method: GET, Route: about]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(214): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/header.php')
+ 2 SYSTEMPATH\View\View.php(475): CodeIgniter\View\View->render('partials/header', null, true)
+ 3 APPPATH\Views\about.php(1): CodeIgniter\View\View->include('partials/header')
+ 4 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\ITE311-VISAYAS\\app\\Views\\about.php')
+ 5 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('about', [], true)
+ 7 APPPATH\Controllers\Home.php(14): view('about')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->about()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\ITE311-VISAYAS\\public\\index.php')
+CRITICAL - 2025-08-17 15:42:13 --> ErrorException: Allowed memory size of 536870912 bytes exhausted (tried to allocate 262144 bytes)
+[Method: GET, Route: about]
+in SYSTEMPATH\View\View.php on line 475.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-08-17 15:42:24 --> ErrorException: Allowed memory size of 536870912 bytes exhausted (tried to allocate 262144 bytes)
+[Method: GET, Route: contact]
+in SYSTEMPATH\View\View.php on line 475.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
