@@ -30,31 +30,40 @@ class CreateSubmissionsTable extends Migration
                 'constraint' => 11,
                 'default'    => 0,
             ],
-            'submitted_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
             'created_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
-            'updated_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
+    'type'    => 'DATETIME',
+    'null'    => true,
+    'default' => null,
+],
+'updated_at' => [
+    'type'    => 'DATETIME',
+    'null'    => true,
+    'default' => null,
+],
+'deleted_at' => [
+    'type'    => 'DATETIME',
+    'null'    => true,
+    'default' => null,
+],
+
         ]);
 
+        // Primary Key
         $this->forge->addKey('submission_id', true);
 
-        // Foreign Keys
-        $this->forge->addForeignKey('quiz_id', 'quizzes', 'quiz_id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'users', 'user_id', 'CASCADE', 'CASCADE');
+        // Indexes for faster lookups
+        $this->forge->addKey('quiz_id');
+        $this->forge->addKey('user_id');
 
-        $this->forge->createTable('submissions');
+        // Foreign Keys (must match existing PKs!)
+        $this->forge->addForeignKey('quiz_id', 'quizzes', 'quiz_id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+
+        $this->forge->createTable('submissions', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('submissions');
+        $this->forge->dropTable('submissions', true);
     }
 }
