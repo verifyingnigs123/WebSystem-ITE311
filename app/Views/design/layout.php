@@ -9,6 +9,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light">
 
+
   <!-- Centered Page Content -->
   <div class="container text-center my-auto py-5">
     <?= $this->renderSection('content') ?>

@@ -1,4 +1,4 @@
-<?= $this->extend('template') ?>
+<?= $this->extend('design/template') ?>
 
 <?= $this->section('content') ?>
 <div class="row justify-content-center mt-2">

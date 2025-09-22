@@ -1,4 +1,4 @@
-<?= $this->extend('template') ?>
+<?= $this->extend('design/template') ?>
 
 <?= $this->section('title') ?>About<?= $this->endSection() ?>
 

@@ -21,3 +21,7 @@ $routes->get('/dashboard', 'Home::dashboard');
 // Registration
 $routes->get('/register', 'Auth::register');
 $routes->post('/register', 'Auth::store');
+
+$routes->get('/admin/dashboard', 'Admin\Dashboard::index');
+$routes->get('/teacher/dashboard', 'Teacher\Dashboard::index');
+$routes->get('/student/dashboard', 'Student\Dashboard::index');
