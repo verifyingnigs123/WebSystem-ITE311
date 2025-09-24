@@ -1,13 +1,7 @@
-<?= $this->extend('design/layout') ?>
+<?= $this->extend('design/template') ?>
 
 <?= $this->section('content') ?>
 <div class="container py-4">
-
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">Dashboard</h2>
-        <a href="<?= base_url('logout') ?>" class="btn btn-sm btn-outline-danger">Logout</a>
-    </div>
 
     <!-- Welcome -->
     <div class="alert alert-primary shadow-sm border-0">

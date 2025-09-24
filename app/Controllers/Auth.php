@@ -35,10 +35,10 @@ class Auth extends BaseController
 
             // Save session
             $userSession = [
-                'userId'        => $userRecord['id'],
-                'userName'      => $userRecord['name'],
-                'userEmail'     => $userRecord['email'],
-                'userRole'      => $userRecord['role'],
+                'userId'          => $userRecord['id'],
+                'userName'        => $userRecord['name'],
+                'userEmail'       => $userRecord['email'],
+                'userRole'        => $userRecord['role'],
                 'isAuthenticated' => true
             ];
 
@@ -51,32 +51,10 @@ class Auth extends BaseController
         return view('login');
     }
 
-    public function attempt()
-    {
-        $email = trim((string) $this->request->getPost('email'));
-        $password = (string) $this->request->getPost('password');
-
-        $userModel = new UserModel();
-        $user = $userModel->where('email', $email)->first();
-
-        if ($user && password_verify($password, $user['password'])) {
-            session()->set([
-                'isAuthenticated' => true,
-                'userId'    => $user['id'],
-                'userName'  => $user['name'],
-                'userEmail' => $user['email'],
-                'userRole'  => $user['role'],
-            ]);
-            return redirect()->to('/dashboard');
-        }
-
-        return redirect()->back()->with('login_error', 'Invalid credentials.');
-    }
-
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('/login');
+        return redirect()->to('/login')->with('success', 'You have been logged out.');
     }
 
     public function register()
@@ -86,9 +64,9 @@ class Auth extends BaseController
         }
 
         if ($this->request->getMethod() === 'POST') {
-            $fullName = trim((string) $this->request->getPost('name'));
-            $emailAddress = trim((string) $this->request->getPost('email'));
-            $newPassword = (string) $this->request->getPost('password');
+            $fullName       = trim((string) $this->request->getPost('name'));
+            $emailAddress   = trim((string) $this->request->getPost('email'));
+            $newPassword    = (string) $this->request->getPost('password');
             $confirmPassword = (string) $this->request->getPost('password_confirm');
 
             if ($fullName === '' || $emailAddress === '' || $newPassword === '' || $confirmPassword === '') {

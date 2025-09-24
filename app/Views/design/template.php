@@ -9,14 +9,20 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light">
   
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a class="navbar-brand" href="<?= base_url('/') ?>">MySite</a>
-      <div class="ms-auto"> <!-- pushes buttons to the right -->
-        <a class="btn btn-outline-light me-2" href="<?= base_url('/') ?>">Home</a>
-        <a class="btn btn-outline-light me-2" href="<?= base_url('/about') ?>">About</a>
-        <a class="btn btn-outline-light me-2" href="<?= base_url('/contact') ?>">Contact</a>
-        <a class="btn btn-success" href="<?= base_url('/login') ?>">Login</a> <!-- 👈 Login button -->
+      <div class="ms-auto">
+        <?php if (!session()->get('isAuthenticated')): ?>
+          <!-- Show when NOT logged in -->
+          <a class="btn btn-outline-light me-2" href="<?= base_url('/') ?>">Home</a>
+          <a class="btn btn-outline-light me-2" href="<?= base_url('/about') ?>">About</a>
+          <a class="btn btn-outline-light me-2" href="<?= base_url('/contact') ?>">Contact</a>
+          <a class="btn btn-success" href="<?= base_url('/login') ?>">Login</a>
+        <?php else: ?>
+          <!-- Show only Logout when logged in -->
+          <a class="btn btn-danger" href="<?= base_url('/logout') ?>">Logout</a>
+        <?php endif; ?>
       </div>
     </div>
   </nav>
