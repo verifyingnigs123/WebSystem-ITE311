@@ -107,11 +107,27 @@ class Auth extends BaseController
     }
 
     public function dashboard()
-    {
-        if (!session()->get('isAuthenticated')) {
-            return redirect()->to('/login')->with('error', 'Authentication required.');
-        }
-
-        return view('dashboard');
+{
+    if (!session()->get('isAuthenticated')) {
+        return redirect()->to('/login')->with('error', 'Please login first.');
     }
+
+    $role     = session()->get('userRole');
+    $userName = session()->get('userName');
+
+    $data = [
+        'title'    => 'Dashboard',
+        'role'     => $role,
+        'userName' => $userName,
+    ];
+
+    if ($role === 'admin') {
+        $userModel     = new UserModel();
+        $data['users'] = $userModel->findAll(); // Example for admin
+    }
+    // Student and teacher just use default $data
+
+    return view('auth/dashboard', $data);
+}
+
 }
