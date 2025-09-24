@@ -13,15 +13,11 @@ $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/contact', 'Home::contact');
 
-// Auth & Dashboard
-$routes->get('/login', 'Auth::login');
-$routes->post('/login', 'Auth::attempt');
-$routes->get('/logout', 'Auth::logout');
-$routes->get('/dashboard', 'Home::dashboard');
-// Registration
-$routes->get('/register', 'Auth::register');
-$routes->post('/register', 'Auth::store');
 
-$routes->get('/admin/dashboard', 'Admin\Dashboard::index');
-$routes->get('/teacher/dashboard', 'Teacher\Dashboard::index');
-$routes->get('/student/dashboard', 'Student\Dashboard::index');
+// routes for login register and dashboard
+$routes->get('/register', 'Auth::register');
+$routes->post('/register', 'Auth::register');
+$routes->get('/login', 'Auth::login');
+$routes->post('/login', 'Auth::login');
+$routes->get('/logout', 'Auth::logout');
+$routes->get('/dashboard', 'Auth::dashboard');
