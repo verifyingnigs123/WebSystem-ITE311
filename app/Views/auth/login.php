@@ -33,7 +33,7 @@
     </div>
     <p class="text-center mt-3 small">
       Don’t have an account? 
-      <a href="<?= base_url('register') ?>" class="text-primary fw-bold">Register</a>
+      <a href="<?= base_url('auth/register') ?>" class="text-primary fw-bold">Register</a>
     </p>
   </div>
 </div>
