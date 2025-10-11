@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'name' => [
+            'username' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
                 'unique'     => true,

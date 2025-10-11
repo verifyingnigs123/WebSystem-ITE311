@@ -12,12 +12,20 @@ class UserSeeder extends Seeder
             [
                 'username' => 'admin',
                 'email'    => 'admin@example.com',
-                'password' => password_hash('123456', PASSWORD_DEFAULT),
+                'password' => password_hash('admin', PASSWORD_DEFAULT),
+                'role'     => 'admin',
             ],
             [
-                'username' => 'testuser',
-                'email'    => 'test@example.com',
-                'password' => password_hash('password', PASSWORD_DEFAULT),
+                'username' => 'teacher1',
+                'email'    => 'teacher@example.com',
+                'password' => password_hash('teacher', PASSWORD_DEFAULT),
+                'role'     => 'teacher',
+            ],
+            [
+                'username' => 'student1',
+                'email'    => 'student@example.com',
+                'password' => password_hash('student', PASSWORD_DEFAULT),
+                'role'     => 'student',
             ],
         ];
 

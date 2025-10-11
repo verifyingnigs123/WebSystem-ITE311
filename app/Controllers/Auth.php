@@ -41,9 +41,9 @@ class Auth extends BaseController
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
             $userId = $userModel->insert([
-                'name' => $name,
+                'username' => $name,
                 'email' => $email,
-                'role' => 'role',
+                'role' => 'student',
                 'password' => $passwordHash,
             ], true);
 
@@ -111,13 +111,19 @@ class Auth extends BaseController
         }
 
         $role = $session->get('userRole');
+        $userEmail = $session->get('userEmail');
+        
+        // Get user details from database
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->where('email', $userEmail)->first();
+        
         $data = [
             'userRole' => $role,
-            'userEmail' => $session->get('userEmail')
+            'userEmail' => $userEmail,
+            'userName' => $user['username'] ?? 'User'
         ];
 
         if ($role === 'admin') {
-            $userModel = new \App\Models\UserModel();
             $courseModel = new \App\Models\CourseModel();
 
             $data['totalUsers'] = $userModel->countAllResults();

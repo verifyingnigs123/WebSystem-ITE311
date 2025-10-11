@@ -9,7 +9,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light">
 
-  <?php if (!session()->get('isAuthenticated')): ?>
+  <?php if (!session()->get('isLoggedIn')): ?>
     <!-- NAVBAR for guests -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div class="container">
