@@ -23,7 +23,7 @@
             <li class="nav-item"><a class="nav-link text-white" href="<?= base_url('/about') ?>">About</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="<?= base_url('/contact') ?>">Contact</a></li>
             <li class="nav-item">
-              <a class="btn btn-light btn-sm ms-lg-3" href="<?= base_url('/login') ?>">Login</a>
+              <a class="btn btn-light btn-sm" href="<?= base_url('/login') ?>">Login</a>
             </li>
           </ul>
         </div>
@@ -34,17 +34,31 @@
     <?= $this->include('template/header') ?>
   <?php endif; ?>
 
+
   <!-- Page Content -->
   <main class="container my-5 flex-grow-1">
     <?= $this->renderSection('content') ?>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-primary text-white text-center py-3 mt-auto">
-    <div class="container">
-      <small>&copy; <?= date('Y') ?> MyCI Project. All rights reserved.</small>
-    </div>
-  </footer>
+
+  <?php
+    // Hide footer on login, register, and dashboard pages
+    $uri = uri_string();
+    $hideFooter = (
+      strpos($uri, 'login') !== false ||
+      strpos($uri, 'register') !== false ||
+      strpos($uri, 'dashboard') !== false
+    );
+  ?>
+
+  <?php if (!$hideFooter): ?>
+    <!-- Footer (visible only on non-auth pages) -->
+    <footer class="bg-primary text-white text-center py-3 mt-auto">
+      <div class="container">
+        <small>&copy; <?= date('Y') ?> MyCI Project. All rights reserved.</small>
+      </div>
+    </footer>
+  <?php endif; ?>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

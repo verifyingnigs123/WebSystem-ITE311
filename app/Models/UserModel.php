@@ -20,7 +20,9 @@ class UserModel extends Model
         'updated_at',
     ];
 
-    protected $useTimestamps = false; // timestamps handled by DB defaults in migration
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
 }
 
 

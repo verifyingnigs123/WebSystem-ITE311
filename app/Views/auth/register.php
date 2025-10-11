@@ -1,45 +1,53 @@
 <?= $this->extend('design/template') ?>
 
+<?= $this->section('title') ?>Register<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
-<div class="row justify-content-center my-5">
-  <div class="col-md-7 col-lg-6">
-    <div class="card shadow-lg border-0">
-      <div class="card-header bg-primary text-white text-center">
-        <h3 class="mb-0">Create Account</h3>
-      </div>
-      <div class="card-body p-4">
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="text-center text-primary mb-4">Create an Account</h3>
 
-        <?php if (session()->getFlashdata('register_error')): ?>
-          <div class="alert alert-danger"><?= esc(session()->getFlashdata('register_error')) ?></div>
-        <?php endif; ?>
+          <?php if (session()->getFlashdata('register_error')): ?>
+            <div class="alert alert-danger"><?= session()->getFlashdata('register_error') ?></div>
+          <?php endif; ?>
+          <?php if (session()->getFlashdata('register_success')): ?>
+            <div class="alert alert-success"><?= session()->getFlashdata('register_success') ?></div>
+          <?php endif; ?>
 
-        <form action="<?= base_url('register') ?>" method="post">
-          <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" name="name" 
-                   required value="<?= esc(old('name')) ?>">
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" 
-                   required value="<?= esc(old('email')) ?>">
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-          </div>
-          <div class="mb-3">
-            <label for="password_confirm" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Create Account</button>
-        </form>
+          <form method="post" action="<?= base_url('/register') ?>">
+            <?= csrf_field() ?>
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="name" value="<?= old('name') ?>" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" value="<?= old('email') ?>" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="password_confirm" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+          </form>
+
+          <p class="text-center mt-3">
+            Already have an account? <a href="<?= base_url('/login') ?>">Login</a>
+          </p>
+        </div>
       </div>
     </div>
-    <p class="text-center mt-3 small">
-      Already have an account? 
-      <a href="<?= base_url('login') ?>" class="text-primary fw-bold">Login</a>
-    </p>
   </div>
 </div>
 <?= $this->endSection() ?>

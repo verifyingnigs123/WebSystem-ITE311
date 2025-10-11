@@ -20,3 +20,13 @@ $routes->get('/login', 'Auth::login');
 $routes->post('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
 $routes->get('/dashboard', 'Auth::dashboard');
+
+// Course enrollment routes
+$routes->post('/course/enroll', 'Course::enroll');
+$routes->get('/course/enrolled', 'Course::getEnrolledCourses');
+$routes->get('/course/available', 'Course::getAvailableCourses');
+
+// Course management routes (for teachers)
+$routes->post('/course/create', 'Course::create');
+$routes->get('/course/teacher-courses', 'Course::getTeacherCourses');
+$routes->get('/course/all-available', 'Course::getAllAvailableCourses');

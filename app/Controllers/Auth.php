@@ -41,7 +41,7 @@ class Auth extends BaseController
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
             $userId = $userModel->insert([
-                'username' => $name,
+                'name' => $name,
                 'email' => $email,
                 'role' => 'student',
                 'password' => $passwordHash,
@@ -80,6 +80,7 @@ class Auth extends BaseController
                    // Store the user's email and role in the session
                    $session->set([
                        'isLoggedIn' => true,
+                       'user_id' => $user['id'],
                        'userEmail' => $email,
                        'userRole' => $user['role'],
                    ]);
@@ -120,7 +121,7 @@ class Auth extends BaseController
         $data = [
             'userRole' => $role,
             'userEmail' => $userEmail,
-            'userName' => $user['username'] ?? 'User'
+            'userName' => $user['name'] ?? 'User'
         ];
 
         if ($role === 'admin') {
@@ -137,22 +138,40 @@ class Auth extends BaseController
                 ['name'=>'Sarah Green','role'=>'Teacher','action'=>'Graded','target'=>'Student Assignment: "Science Lab 2"','created_at'=>'2025-09-18 09:45'],
             ];
         } elseif ($role === 'teacher') {
-            $data['teacherCourses'] = [
-                ['id' => 1, 'name' => 'Web Development', 'students' => 25, 'status' => 'active'],
-                ['id' => 2, 'name' => 'Database Management', 'students' => 18, 'status' => 'active'],
-                ['id' => 3, 'name' => 'Software Engineering', 'students' => 22, 'status' => 'active']
-            ];
+            $courseModel = new \App\Models\CourseModel();
+            $enrollmentModel = new \App\Models\EnrollmentModel();
+            
+            $teacherId = $user['id'];
+            
+            // Get courses created by this teacher
+            $teacherCourses = $courseModel->getCoursesByTeacher($teacherId);
+            
+            // Add student count for each course
+            foreach ($teacherCourses as &$course) {
+                $course['students'] = $enrollmentModel->getCourseEnrollmentCount($course['course_id']);
+                $course['status'] = 'active';
+            }
+            
+            $data['teacherCourses'] = $teacherCourses;
             $data['notifications'] = [
                 ['id' => 1, 'message' => 'New assignment submitted by John Doe', 'time' => '2 hours ago', 'type' => 'assignment'],
                 ['id' => 2, 'message' => 'Student Sarah Wilson needs help with project', 'time' => '4 hours ago', 'type' => 'help'],
                 ['id' => 3, 'message' => 'Course "Web Development" has 3 new enrollments', 'time' => '1 day ago', 'type' => 'enrollment']
             ];
         } elseif ($role === 'student') {
-            $data['enrolledCourses'] = [
-                ['id' => 1, 'name' => 'Web Development', 'instructor' => 'Dr. Smith', 'progress' => 75],
-                ['id' => 2, 'name' => 'Database Management', 'instructor' => 'Prof. Johnson', 'progress' => 60],
-                ['id' => 3, 'name' => 'Software Engineering', 'instructor' => 'Dr. Brown', 'progress' => 45]
-            ];
+            // Get enrollment data for students
+            $enrollmentModel = new \App\Models\EnrollmentModel();
+            $courseModel = new \App\Models\CourseModel();
+            
+            $userId = $user['id'];
+            
+            // Get enrolled courses
+            $data['enrolledCourses'] = $enrollmentModel->getUserEnrollments($userId);
+            
+            // Get available courses using the new method
+            $data['availableCourses'] = $courseModel->getAvailableCoursesForStudent($userId);
+            
+            // Add some sample data for other sections
             $data['upcomingDeadlines'] = [
                 ['course' => 'Web Development', 'assignment' => 'Final Project', 'due_date' => '2025-01-25', 'status' => 'pending'],
                 ['course' => 'Database Management', 'assignment' => 'SQL Quiz', 'due_date' => '2025-01-28', 'status' => 'pending'],
@@ -166,5 +185,13 @@ class Auth extends BaseController
         }
 
         return view('auth/dashboard', $data);
+    }
+
+    /**
+     * Redirects user based on their role
+     */
+    private function redirectBasedOnRole($role)
+    {
+        return redirect()->to(base_url('dashboard'));
     }
 }
