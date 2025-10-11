@@ -171,6 +171,11 @@ class Auth extends BaseController
             // Get available courses using the new method
             $data['availableCourses'] = $courseModel->getAvailableCoursesForStudent($userId);
             
+            // Debug logging
+            log_message('info', 'Dashboard - Student ID: ' . $userId);
+            log_message('info', 'Dashboard - Available courses count: ' . count($data['availableCourses']));
+            log_message('info', 'Dashboard - Available courses: ' . json_encode($data['availableCourses']));
+            
             // Add some sample data for other sections
             $data['upcomingDeadlines'] = [
                 ['course' => 'Web Development', 'assignment' => 'Final Project', 'due_date' => '2025-01-25', 'status' => 'pending'],

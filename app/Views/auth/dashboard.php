@@ -72,12 +72,20 @@
     <?php elseif (($userRole ?? '') === 'teacher'): ?>
       <!-- Teacher Dashboard -->
       <div class="col-12">
-        <!-- Add Course Button -->
+        <!-- Teacher Action Buttons -->
         <div class="row mb-4">
           <div class="col-12">
-            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addCourseModal">
-              <i class="fas fa-plus"></i> Add New Course
-            </button>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="<?= base_url('teacher/add-course') ?>" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Add New Course
+              </a>
+              <a href="<?= base_url('teacher/manage-courses') ?>" class="btn btn-success btn-lg">
+                <i class="fas fa-book"></i> Manage Courses
+              </a>
+              <a href="<?= base_url('teacher/manage-students') ?>" class="btn btn-info btn-lg">
+                <i class="fas fa-users"></i> Manage Students
+              </a>
+            </div>
           </div>
         </div>
 
@@ -181,6 +189,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <form id="addCourseForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                   <div class="mb-3">
                     <label for="course_code" class="form-label">Course Code *</label>
@@ -408,7 +417,6 @@
         <?php endif; ?>
 
         <!-- AJAX Enrollment Script -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
         $(document).ready(function() {
             // Handle enrollment button clicks
@@ -419,15 +427,31 @@
                 var courseId = button.data('course-id');
                 var courseName = button.data('course-name');
                 
+                console.log('Enrollment button clicked:', {
+                    courseId: courseId,
+                    courseName: courseName,
+                    button: button
+                });
+                
                 // Disable button and show loading state
                 button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enrolling...');
                 
                 // Send AJAX request
-                $.post('<?= base_url('course/enroll') ?>', {
-                    course_id: courseId
+                console.log('Sending AJAX request to:', '<?= base_url('course/enroll') ?>');
+                console.log('POST data:', { course_id: courseId });
+                
+                $.ajax({
+                    url: '<?= base_url('course/enroll') ?>',
+                    type: 'POST',
+                    data: {
+                        course_id: courseId
+                    },
+                    dataType: 'json',
+                    timeout: 10000
                 })
                 .done(function(response) {
-                    if (response.success) {
+                    console.log('AJAX response received:', response);
+                    if (response && response.success) {
                         // Show success message
                         showAlert('success', response.message);
                         
@@ -443,15 +467,36 @@
                         updateEnrolledCount();
                     } else {
                         // Show error message
-                        showAlert('danger', response.message);
+                        showAlert('danger', (response && response.message) ? response.message : 'Failed to enroll in course.');
                         
                         // Re-enable button
                         button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
                     }
                 })
-                .fail(function() {
+                .fail(function(xhr, status, error) {
+                    console.error('Enrollment failed:', xhr.responseText, status, error);
+                    console.error('XHR object:', xhr);
+                    console.error('Status:', status);
+                    console.error('Error:', error);
+                    
+                    let errorMessage = 'An error occurred. Please try again.';
+                    if (status === 'timeout') {
+                        errorMessage = 'Request timed out. Please try again.';
+                    } else if (xhr.status === 0) {
+                        errorMessage = 'Network error. Please check your connection.';
+                    } else {
+                        try {
+                            const errorResponse = JSON.parse(xhr.responseText);
+                            if (errorResponse && errorResponse.message) {
+                                errorMessage = errorResponse.message;
+                            }
+                        } catch (e) {
+                            console.error('Could not parse error response:', e);
+                        }
+                    }
+                    
                     // Show error message
-                    showAlert('danger', 'An error occurred. Please try again.');
+                    showAlert('danger', errorMessage);
                     
                     // Re-enable button
                     button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
@@ -522,9 +567,24 @@
                 submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
                 
                 // Send AJAX request
-                $.post('<?= base_url('course/create') ?>', formData)
+                console.log('Sending course creation request:', formData);
+                $.ajax({
+                    url: '<?= base_url('course/create') ?>',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    timeout: 10000, // 10 second timeout
+                    beforeSend: function(xhr) {
+                        // Add CSRF token if available
+                        var csrfToken = $('input[name="<?= csrf_token() ?>"]').val();
+                        if (csrfToken) {
+                            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                        }
+                    }
+                })
                 .done(function(response) {
-                    if (response.success) {
+                    console.log('Course creation response:', response);
+                    if (response && response.success) {
                         // Show success message
                         showTeacherAlert('success', response.message);
                         
@@ -537,14 +597,47 @@
                         
                         // Update course count
                         updateCourseCount();
+                        
+                        // Show a toast notification if available
+                        if (typeof toastr !== 'undefined') {
+                            toastr.success(response.message);
+                        }
                     } else {
-                        // Show error message
-                        showTeacherAlert('danger', response.message);
+                        // Show error message with more details
+                        console.error('Course creation failed:', response);
+                        showTeacherAlert('danger', (response && response.message) ? response.message : 'Failed to create course. Please try again.');
                     }
                 })
-                .fail(function() {
-                    // Show error message
-                    showTeacherAlert('danger', 'An error occurred. Please try again.');
+                .fail(function(xhr, status, error) {
+                    console.error('Course creation failed:', xhr.responseText, status, error);
+                    console.error('Response status:', xhr.status);
+                    console.error('Response headers:', xhr.getAllResponseHeaders());
+                    
+                    // Try to parse error response
+                    let errorMessage = 'An error occurred. Please try again.';
+                    if (status === 'timeout') {
+                        errorMessage = 'Request timed out. Please check your connection and try again.';
+                    } else if (xhr.status === 0) {
+                        errorMessage = 'Network error. Please check your connection.';
+                    } else if (xhr.status >= 500) {
+                        errorMessage = 'Server error. Please try again later.';
+                    } else if (xhr.status === 404) {
+                        errorMessage = 'Course creation endpoint not found. Please contact support.';
+                    } else {
+                        try {
+                            const errorResponse = JSON.parse(xhr.responseText);
+                            if (errorResponse && errorResponse.message) {
+                                errorMessage = errorResponse.message;
+                            }
+                        } catch (e) {
+                            console.error('Could not parse error response:', e);
+                            if (xhr.responseText) {
+                                errorMessage = 'Server returned: ' + xhr.responseText.substring(0, 100);
+                            }
+                        }
+                    }
+                    
+                    showTeacherAlert('danger', errorMessage);
                 })
                 .always(function() {
                     // Re-enable submit button
@@ -554,6 +647,7 @@
             
             function showTeacherAlert(type, message) {
                 var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+                    '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle') + ' me-2"></i>' +
                     message +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                     '</div>';
@@ -561,22 +655,31 @@
                 // Clear existing alerts and show new one
                 $('#teacher-alert-container').html(alertHtml);
                 
-                // Auto-hide after 5 seconds
+                // Auto-hide after 5 seconds for success, 8 seconds for errors
+                var hideDelay = type === 'success' ? 5000 : 8000;
                 setTimeout(function() {
                     $('#teacher-alert-container .alert').fadeOut();
-                }, 5000);
+                }, hideDelay);
             }
             
             function refreshCourses() {
-                $.get('<?= base_url('course/getTeacherCourses') ?>')
+                $.ajax({
+                    url: '<?= base_url('course/getTeacherCourses') ?>',
+                    type: 'GET',
+                    dataType: 'json',
+                    timeout: 5000
+                })
                 .done(function(response) {
-                    if (response.success) {
-                        updateCoursesList(response.courses);
+                    if (response && response.success) {
+                        updateCoursesList(response.courses || []);
                         updateCourseCount();
+                    } else {
+                        showTeacherAlert('warning', 'Failed to load courses data.');
                     }
                 })
-                .fail(function() {
-                    showTeacherAlert('danger', 'Failed to refresh courses.');
+                .fail(function(xhr, status, error) {
+                    console.error('Failed to refresh courses:', xhr.responseText, status, error);
+                    showTeacherAlert('danger', 'Failed to refresh courses. Please try again.');
                 });
             }
             

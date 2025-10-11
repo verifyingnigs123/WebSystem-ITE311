@@ -30,3 +30,13 @@ $routes->get('/course/available', 'Course::getAvailableCourses');
 $routes->post('/course/create', 'Course::create');
 $routes->get('/course/teacher-courses', 'Course::getTeacherCourses');
 $routes->get('/course/all-available', 'Course::getAllAvailableCourses');
+
+// Teacher dashboard routes
+$routes->get('/teacher/add-course', 'Teacher::addCourse');
+$routes->get('/teacher/manage-courses', 'Teacher::manageCourses');
+$routes->get('/teacher/manage-students', 'Teacher::manageStudents');
+$routes->post('/course/update/(:num)', 'Course::update/$1');
+$routes->post('/course/delete/(:num)', 'Course::delete/$1');
+$routes->get('/course/get/(:num)', 'Course::get/$1');
+$routes->get('/course/getTeacherStudents', 'Course::getTeacherStudents');
+$routes->get('/course/getStudentDetails/(:num)', 'Course::getStudentDetails/$1');

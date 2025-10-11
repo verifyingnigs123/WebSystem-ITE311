@@ -148,4 +148,49 @@ class EnrollmentModel extends Model
         
         return $builder->get()->getResultArray();
     }
+
+    /**
+     * Get enrollments by course
+     * 
+     * @param int $courseId The course ID
+     * @return array Array of enrollment records
+     */
+    public function getEnrollmentsByCourse($courseId)
+    {
+        return $this->where('course_id', $courseId)->findAll();
+    }
+
+    /**
+     * Get students enrolled in teacher's courses
+     * 
+     * @param int $teacherId The teacher ID
+     * @return array Array of student enrollment records
+     */
+    public function getStudentsByTeacher($teacherId)
+    {
+        $builder = $this->db->table('enrollments e');
+        $builder->select('e.*, c.course_name, c.course_code, u.name as student_name, u.email');
+        $builder->join('courses c', 'e.course_id = c.course_id', 'left');
+        $builder->join('users u', 'e.user_id = u.id', 'left');
+        $builder->where('c.teacher_id', $teacherId);
+        $builder->orderBy('e.enrollment_date', 'DESC');
+        
+        return $builder->get()->getResultArray();
+    }
+
+    /**
+     * Get student details
+     * 
+     * @param int $studentId The student ID
+     * @return array|null Student details or null if not found
+     */
+    public function getStudentDetails($studentId)
+    {
+        $builder = $this->db->table('users u');
+        $builder->select('u.*');
+        $builder->where('u.id', $studentId);
+        $builder->where('u.role', 'student');
+        
+        return $builder->get()->getRowArray();
+    }
 }

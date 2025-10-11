@@ -127,3 +127,968 @@ Stack trace:
 #11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
 #12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
 #13 {main}
+ERROR - 2025-10-11 18:42:37 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:42:37 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:42:37 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:42:37 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:43:03 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:43:03 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:03 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:03 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:43:05 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:43:05 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:05 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:05 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:43:06 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:43:06 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:06 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:06 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:43:47 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:43:47 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:47 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:43:47 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:51:43 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:51:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:43 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:43 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:51:49 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:51:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:49 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:51:51 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:51:51 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:51 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:51:51 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 18:52:06 --> mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, C...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, C...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, C...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, C...', Array, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(363): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\ITE311-VISAYAS\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-10-11 18:52:06 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+[Method: GET, Route: dashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 684.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 2 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:52:06 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 4 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-11 18:52:06 --> [Caused by] mysqli_sql_exception: Unknown column 'c.teacher_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = \'2\'
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `c`.*, COUNT(e.enrollment_id) as students
+FROM `courses` `c`
+LEFT JOIN `enrollments` `e` ON `c`.`course_id` = `e`.`course_id`
+WHERE `c`.`teacher_id` = :c.teacher_id:
+GROUP BY `c`.`course_id`
+ORDER BY `c`.`created_at` DESC', [...], false)
+ 5 APPPATH\Models\CourseModel.php(79): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Auth.php(147): App\Models\CourseModel->getCoursesByTeacher('2')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Auth->dashboard()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 19:06:29 --> mysqli_sql_exception: Table 'lms_visayas.courses' doesn't exist in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('ALTER TABLE `co...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('ALTER TABLE `co...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('ALTER TABLE `co...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Forge.php(772): CodeIgniter\Database\BaseConnection->query('ALTER TABLE `co...')
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Migrations\2025-01-25-000000_AddTeacherIdToCourses.php(11): CodeIgniter\Database\Forge->addColumn('courses', Array)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MigrationRunner.php(876): App\Database\Migrations\AddTeacherIdToCourses->up()
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-10-11 19:07:27 --> mysqli_sql_exception: Table 'lms_visayas.courses' doesn't exist in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('ALTER TABLE `co...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('ALTER TABLE `co...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('ALTER TABLE `co...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Forge.php(772): CodeIgniter\Database\BaseConnection->query('ALTER TABLE `co...')
+#4 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Migrations\2025-01-25-000000_AddTeacherIdToCourses.php(11): CodeIgniter\Database\Forge->addColumn('courses', Array)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MigrationRunner.php(876): App\Database\Migrations\AddTeacherIdToCourses->up()
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-10-11 19:08:51 --> mysqli_sql_exception: Unknown column 'name' in 'field list' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', NULL, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Seeds\UserSeeder.php(33): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-10-11 19:09:07 --> mysqli_sql_exception: Unknown column 'name' in 'field list' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', NULL, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Seeds\UserSeeder.php(33): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+CRITICAL - 2025-10-11 19:12:30 --> TypeError: CodeIgniter\CLI\InputOutput::input(): Return value must be of type string, bool returned
+[Method: CLI, Route: migrate:rollback]
+in SYSTEMPATH\CLI\InputOutput.php on line 46.
+ 1 SYSTEMPATH\CLI\CLI.php(260): CodeIgniter\CLI\InputOutput->input()
+ 2 SYSTEMPATH\Commands\Database\MigrateRollback.php(76): CodeIgniter\CLI\CLI::prompt('Are you sure you want to rollback?', [...])
+ 3 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRollback->run([])
+ 4 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:rollback', [])
+ 5 SYSTEMPATH\Boot.php(388): CodeIgniter\CLI\Console->run()
+ 6 SYSTEMPATH\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+ 7 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2025-10-11 19:52:23 --> ErrorException: Cannot redeclare App\Models\CourseModel::getCoursesByTeacher()
+[Method: GET, Route: dashboard]
+in APPPATH\Models\CourseModel.php on line 157.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-10-11 19:53:07 --> Error: Call to undefined method CodeIgniter\HTTP\IncomingRequest::isValid()
+[Method: POST, Route: course/create]
+in APPPATH\Controllers\Course.php on line 167.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Course->create()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Course))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-10-11 19:54:26 --> mysqli_sql_exception: Duplicate entry 'admin@example.com' for key 'email' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', NULL, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Seeds\UserSeeder.php(33): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-10-11 20:01:26 --> mysqli_sql_exception: Duplicate entry 'admin@example.com' for key 'email' in C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', NULL, false)
+#4 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 C:\xampp\htdocs\ITE311-VISAYAS\app\Database\Seeds\UserSeeder.php(33): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 C:\xampp\htdocs\ITE311-VISAYAS\system\Database\Seeder.php(149): App\Database\Seeds\UserSeeder->run()
+#7 C:\xampp\htdocs\ITE311-VISAYAS\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#9 C:\xampp\htdocs\ITE311-VISAYAS\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#10 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(388): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\ITE311-VISAYAS\system\Boot.php(133): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\ITE311-VISAYAS\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
