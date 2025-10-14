@@ -416,316 +416,7 @@
         </div>
         <?php endif; ?>
 
-        <!-- AJAX Enrollment Script -->
-        <script>
-        $(document).ready(function() {
-            // Handle enrollment button clicks
-            $(document).on('click', '.enroll-btn', function(e) {
-                e.preventDefault();
-                
-                var button = $(this);
-                var courseId = button.data('course-id');
-                var courseName = button.data('course-name');
-                
-                console.log('Enrollment button clicked:', {
-                    courseId: courseId,
-                    courseName: courseName,
-                    button: button
-                });
-                
-                // Disable button and show loading state
-                button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enrolling...');
-                
-                // Send AJAX request
-                console.log('Sending AJAX request to:', '<?= base_url('course/enroll') ?>');
-                console.log('POST data:', { course_id: courseId });
-                
-                $.ajax({
-                    url: '<?= base_url('course/enroll') ?>',
-                    type: 'POST',
-                    data: {
-                        course_id: courseId
-                    },
-                    dataType: 'json',
-                    timeout: 10000
-                })
-                .done(function(response) {
-                    console.log('AJAX response received:', response);
-                    if (response && response.success) {
-                        // Show success message
-                        showAlert('success', response.message);
-                        
-                        // Hide the button and course from available courses
-                        button.closest('.list-group-item').fadeOut(300, function() {
-                            $(this).remove();
-                        });
-                        
-                        // Add course to enrolled courses list
-                        addToEnrolledCourses(courseId, courseName);
-                        
-                        // Update enrolled courses count
-                        updateEnrolledCount();
-                    } else {
-                        // Show error message
-                        showAlert('danger', (response && response.message) ? response.message : 'Failed to enroll in course.');
-                        
-                        // Re-enable button
-                        button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
-                    }
-                })
-                .fail(function(xhr, status, error) {
-                    console.error('Enrollment failed:', xhr.responseText, status, error);
-                    console.error('XHR object:', xhr);
-                    console.error('Status:', status);
-                    console.error('Error:', error);
-                    
-                    let errorMessage = 'An error occurred. Please try again.';
-                    if (status === 'timeout') {
-                        errorMessage = 'Request timed out. Please try again.';
-                    } else if (xhr.status === 0) {
-                        errorMessage = 'Network error. Please check your connection.';
-                    } else {
-                        try {
-                            const errorResponse = JSON.parse(xhr.responseText);
-                            if (errorResponse && errorResponse.message) {
-                                errorMessage = errorResponse.message;
-                            }
-                        } catch (e) {
-                            console.error('Could not parse error response:', e);
-                        }
-                    }
-                    
-                    // Show error message
-                    showAlert('danger', errorMessage);
-                    
-                    // Re-enable button
-                    button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
-                });
-            });
-            
-            function showAlert(type, message) {
-                var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
-                    message +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                    '</div>';
-                
-                $('#alert-container').html(alertHtml);
-                
-                // Auto-hide after 5 seconds
-                setTimeout(function() {
-                    $('.alert').fadeOut();
-                }, 5000);
-            }
-            
-            function addToEnrolledCourses(courseId, courseName) {
-                var enrolledList = $('#enrolled-courses-list .list-group');
-                
-                // Check if list is empty
-                if (enrolledList.find('.list-group-item').length === 0) {
-                    enrolledList.html('');
-                }
-                
-                var courseHtml = '<div class="list-group-item">' +
-                    '<div class="d-flex justify-content-between align-items-center">' +
-                    '<div>' +
-                    '<strong>' + courseName + '</strong><br>' +
-                    '<small class="text-muted">Enrolled: ' + new Date().toLocaleDateString() + '</small>' +
-                    '</div>' +
-                    '<div class="text-end">' +
-                    '<span class="badge bg-success">Enrolled</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
-                
-                enrolledList.prepend(courseHtml);
-            }
-            
-            function updateEnrolledCount() {
-                var count = $('#enrolled-courses-list .list-group-item').length;
-                $('.card.bg-info .card-text').text(count);
-            }
-        });
-        </script>
-
-        <!-- Teacher Course Management Script -->
-        <script>
-        $(document).ready(function() {
-            // Handle course creation form submission
-            $('#addCourseForm').on('submit', function(e) {
-                e.preventDefault();
-                
-                var formData = {
-                    course_code: $('#course_code').val(),
-                    course_name: $('#course_name').val(),
-                    description: $('#description').val(),
-                    units: $('#units').val()
-                };
-                
-                // Disable submit button and show loading state
-                var submitBtn = $('#saveCourseBtn');
-                var originalText = submitBtn.html();
-                submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
-                
-                // Send AJAX request
-                console.log('Sending course creation request:', formData);
-                $.ajax({
-                    url: '<?= base_url('course/create') ?>',
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    timeout: 10000, // 10 second timeout
-                    beforeSend: function(xhr) {
-                        // Add CSRF token if available
-                        var csrfToken = $('input[name="<?= csrf_token() ?>"]').val();
-                        if (csrfToken) {
-                            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-                        }
-                    }
-                })
-                .done(function(response) {
-                    console.log('Course creation response:', response);
-                    if (response && response.success) {
-                        // Show success message
-                        showTeacherAlert('success', response.message);
-                        
-                        // Close modal and reset form
-                        $('#addCourseModal').modal('hide');
-                        $('#addCourseForm')[0].reset();
-                        
-                        // Refresh courses list
-                        refreshCourses();
-                        
-                        // Update course count
-                        updateCourseCount();
-                        
-                        // Show a toast notification if available
-                        if (typeof toastr !== 'undefined') {
-                            toastr.success(response.message);
-                        }
-                    } else {
-                        // Show error message with more details
-                        console.error('Course creation failed:', response);
-                        showTeacherAlert('danger', (response && response.message) ? response.message : 'Failed to create course. Please try again.');
-                    }
-                })
-                .fail(function(xhr, status, error) {
-                    console.error('Course creation failed:', xhr.responseText, status, error);
-                    console.error('Response status:', xhr.status);
-                    console.error('Response headers:', xhr.getAllResponseHeaders());
-                    
-                    // Try to parse error response
-                    let errorMessage = 'An error occurred. Please try again.';
-                    if (status === 'timeout') {
-                        errorMessage = 'Request timed out. Please check your connection and try again.';
-                    } else if (xhr.status === 0) {
-                        errorMessage = 'Network error. Please check your connection.';
-                    } else if (xhr.status >= 500) {
-                        errorMessage = 'Server error. Please try again later.';
-                    } else if (xhr.status === 404) {
-                        errorMessage = 'Course creation endpoint not found. Please contact support.';
-                    } else {
-                        try {
-                            const errorResponse = JSON.parse(xhr.responseText);
-                            if (errorResponse && errorResponse.message) {
-                                errorMessage = errorResponse.message;
-                            }
-                        } catch (e) {
-                            console.error('Could not parse error response:', e);
-                            if (xhr.responseText) {
-                                errorMessage = 'Server returned: ' + xhr.responseText.substring(0, 100);
-                            }
-                        }
-                    }
-                    
-                    showTeacherAlert('danger', errorMessage);
-                })
-                .always(function() {
-                    // Re-enable submit button
-                    submitBtn.prop('disabled', false).html(originalText);
-                });
-            });
-            
-            function showTeacherAlert(type, message) {
-                var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
-                    '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle') + ' me-2"></i>' +
-                    message +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                    '</div>';
-                
-                // Clear existing alerts and show new one
-                $('#teacher-alert-container').html(alertHtml);
-                
-                // Auto-hide after 5 seconds for success, 8 seconds for errors
-                var hideDelay = type === 'success' ? 5000 : 8000;
-                setTimeout(function() {
-                    $('#teacher-alert-container .alert').fadeOut();
-                }, hideDelay);
-            }
-            
-            function refreshCourses() {
-                $.ajax({
-                    url: '<?= base_url('course/getTeacherCourses') ?>',
-                    type: 'GET',
-                    dataType: 'json',
-                    timeout: 5000
-                })
-                .done(function(response) {
-                    if (response && response.success) {
-                        updateCoursesList(response.courses || []);
-                        updateCourseCount();
-                    } else {
-                        showTeacherAlert('warning', 'Failed to load courses data.');
-                    }
-                })
-                .fail(function(xhr, status, error) {
-                    console.error('Failed to refresh courses:', xhr.responseText, status, error);
-                    showTeacherAlert('danger', 'Failed to refresh courses. Please try again.');
-                });
-            }
-            
-            function updateCoursesList(courses) {
-                var coursesList = $('#teacher-courses-list');
-                
-                if (courses.length === 0) {
-                    coursesList.html('<div class="text-center py-4">' +
-                        '<i class="fas fa-book fa-3x text-muted mb-3"></i>' +
-                        '<p class="text-muted">No courses created yet.</p>' +
-                        '<p class="text-muted">Click "Add New Course" to create your first course!</p>' +
-                        '</div>');
-                } else {
-                    var coursesHtml = '<div class="list-group list-group-flush">';
-                    
-                    courses.forEach(function(course) {
-                        coursesHtml += '<div class="list-group-item">' +
-                            '<div class="d-flex justify-content-between align-items-start">' +
-                            '<div class="flex-grow-1">' +
-                            '<h6 class="mb-1">' + course.course_name + '</h6>' +
-                            '<p class="mb-1 text-muted">Code: ' + course.course_code + '</p>' +
-                            '<p class="mb-1">' + (course.description || 'No description') + '</p>' +
-                            '<small class="text-muted">' +
-                            'Units: ' + (course.units || 3) + ' | ' +
-                            'Students: ' + (course.students || 0) + ' | ' +
-                            'Created: ' + (course.created_at || 'N/A') +
-                            '</small>' +
-                            '</div>' +
-                            '<div class="text-end">' +
-                            '<span class="badge bg-success">' + (course.status || 'Active') + '</span>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
-                    });
-                    
-                    coursesHtml += '</div>';
-                    coursesList.html(coursesHtml);
-                }
-            }
-            
-            function updateCourseCount() {
-                var courseCount = $('#teacher-courses-list .list-group-item').length;
-                $('.card.bg-success .card-text').text(courseCount);
-            }
-        });
-        </script>
+        
       </div>
 
     <?php else: ?>
@@ -739,4 +430,218 @@
     <?php endif; ?>
   </div>
 </div>
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>
+$(document).ready(function() {
+    // Handle enrollment button clicks
+    $(document).on('click', '.enroll-btn', function(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var courseId = button.data('course-id');
+        var courseName = button.data('course-name');
+        
+        console.log('Enrollment button clicked:', {
+            courseId: courseId,
+            courseName: courseName,
+            button: button
+        });
+        
+        // Disable button and show loading state
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enrolling...');
+        
+        // Send AJAX request
+        console.log('Sending AJAX request to:', '<?= base_url('course/enroll') ?>');
+        console.log('POST data:', { course_id: courseId });
+        
+        $.ajax({
+            url: '<?= base_url('course/enroll') ?>',
+            type: 'POST',
+            data: { course_id: courseId },
+            dataType: 'json',
+            timeout: 10000
+        })
+        .done(function(response) {
+            console.log('AJAX response received:', response);
+            if (response && response.success) {
+                showAlert('success', response.message);
+                button.closest('.list-group-item').fadeOut(300, function() { $(this).remove(); });
+                addToEnrolledCourses(courseId, courseName);
+                updateEnrolledCount();
+            } else {
+                showAlert('danger', (response && response.message) ? response.message : 'Failed to enroll in course.');
+                button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
+            }
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Enrollment failed:', xhr.responseText, status, error);
+            let errorMessage = 'An error occurred. Please try again.';
+            if (status === 'timeout') errorMessage = 'Request timed out. Please try again.';
+            else if (xhr.status === 0) errorMessage = 'Network error. Please check your connection.';
+            else {
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    if (errorResponse && errorResponse.message) errorMessage = errorResponse.message;
+                } catch (e) {}
+            }
+            showAlert('danger', errorMessage);
+            button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
+        });
+    });
+    
+    function showAlert(type, message) {
+        var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '</div>';
+        $('#alert-container').html(alertHtml);
+        setTimeout(function() { $('.alert').fadeOut(); }, 5000);
+    }
+    
+    function addToEnrolledCourses(courseId, courseName) {
+        var enrolledList = $('#enrolled-courses-list .list-group');
+        if (enrolledList.find('.list-group-item').length === 0) enrolledList.html('');
+        var courseHtml = '<div class="list-group-item">' +
+            '<div class="d-flex justify-content-between align-items-center">' +
+            '<div>' +
+            '<strong>' + courseName + '</strong><br>' +
+            '<small class="text-muted">Enrolled: ' + new Date().toLocaleDateString() + '</small>' +
+            '</div>' +
+            '<div class="text-end">' +
+            '<span class="badge bg-success">Enrolled</span>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        enrolledList.prepend(courseHtml);
+    }
+    
+    function updateEnrolledCount() {
+        var count = $('#enrolled-courses-list .list-group-item').length;
+        $('.card.bg-info .card-text').text(count);
+    }
+});
+</script>
+<script>
+$(document).ready(function() {
+    // Handle course creation form submission
+    $('#addCourseForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var formData = {
+            course_code: $('#course_code').val(),
+            course_name: $('#course_name').val(),
+            description: $('#description').val(),
+            units: $('#units').val()
+        };
+        
+        var submitBtn = $('#saveCourseBtn');
+        var originalText = submitBtn.html();
+        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
+        
+        $.ajax({
+            url: '<?= base_url('course/create') ?>',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            timeout: 10000,
+            beforeSend: function(xhr) {
+                var csrfToken = $('input[name="<?= csrf_token() ?>"]').val();
+                if (csrfToken) xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            }
+        })
+        .done(function(response) {
+            if (response && response.success) {
+                showTeacherAlert('success', response.message);
+                $('#addCourseModal').modal('hide');
+                $('#addCourseForm')[0].reset();
+                refreshCourses();
+                updateCourseCount();
+                if (typeof toastr !== 'undefined') toastr.success(response.message);
+            } else {
+                showTeacherAlert('danger', (response && response.message) ? response.message : 'Failed to create course. Please try again.');
+            }
+        })
+        .fail(function(xhr, status, error) {
+            let errorMessage = 'An error occurred. Please try again.';
+            if (status === 'timeout') errorMessage = 'Request timed out. Please check your connection and try again.';
+            else if (xhr.status === 0) errorMessage = 'Network error. Please check your connection.';
+            else if (xhr.status >= 500) errorMessage = 'Server error. Please try again later.';
+            else if (xhr.status === 404) errorMessage = 'Course creation endpoint not found. Please contact support.';
+            else {
+                try { const errorResponse = JSON.parse(xhr.responseText); if (errorResponse && errorResponse.message) errorMessage = errorResponse.message; } catch (e) {}
+            }
+            showTeacherAlert('danger', errorMessage);
+        })
+        .always(function() {
+            submitBtn.prop('disabled', false).html(originalText);
+        });
+    });
+    
+    function showTeacherAlert(type, message) {
+        var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+            '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle') + ' me-2"></i>' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '</div>';
+        $('#teacher-alert-container').html(alertHtml);
+        var hideDelay = type === 'success' ? 5000 : 8000;
+        setTimeout(function() { $('#teacher-alert-container .alert').fadeOut(); }, hideDelay);
+    }
+    
+    function refreshCourses() {
+        $.ajax({ url: '<?= base_url('course/getTeacherCourses') ?>', type: 'GET', dataType: 'json', timeout: 5000 })
+        .done(function(response) {
+            if (response && response.success) {
+                updateCoursesList(response.courses || []);
+                updateCourseCount();
+            } else {
+                showTeacherAlert('warning', 'Failed to load courses data.');
+            }
+        })
+        .fail(function(xhr, status, error) {
+            showTeacherAlert('danger', 'Failed to refresh courses. Please try again.');
+        });
+    }
+    
+    function updateCoursesList(courses) {
+        var coursesList = $('#teacher-courses-list');
+        if (courses.length === 0) {
+            coursesList.html('<div class="text-center py-4">' +
+                '<i class="fas fa-book fa-3x text-muted mb-3"></i>' +
+                '<p class="text-muted">No courses created yet.</p>' +
+                '<p class="text-muted">Click "Add New Course" to create your first course!</p>' +
+                '</div>');
+        } else {
+            var coursesHtml = '<div class="list-group list-group-flush">';
+            courses.forEach(function(course) {
+                coursesHtml += '<div class="list-group-item">' +
+                    '<div class="d-flex justify-content-between align-items-start">' +
+                    '<div class="flex-grow-1">' +
+                    '<h6 class="mb-1">' + course.course_name + '</h6>' +
+                    '<p class="mb-1 text-muted">Code: ' + course.course_code + '</p>' +
+                    '<p class="mb-1">' + (course.description || 'No description') + '</p>' +
+                    '<small class="text-muted">' +
+                    'Units: ' + (course.units || 3) + ' | ' +
+                    'Students: ' + (course.students || 0) + ' | ' +
+                    'Created: ' + (course.created_at || 'N/A') +
+                    '</small>' +
+                    '</div>' +
+                    '<div class="text-end">' +
+                    '<span class="badge bg-success">' + (course.status || 'Active') + '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            });
+            coursesHtml += '</div>';
+            coursesList.html(coursesHtml);
+        }
+    }
+    
+    function updateCourseCount() {
+        var courseCount = $('#teacher-courses-list .list-group-item').length;
+        $('.card.bg-success .card-text').text(courseCount);
+    }
+});
+</script>
 <?= $this->endSection() ?>

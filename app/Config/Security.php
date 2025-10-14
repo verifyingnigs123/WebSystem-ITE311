@@ -8,7 +8,7 @@ class Security extends BaseConfig
 {
     /**
      * --------------------------------------------------------------------------
-     * CSRF Protection Method
+      CSRF Protection Method
      * --------------------------------------------------------------------------
      *
      * Protection Method for Cross Site Request Forgery protection.
