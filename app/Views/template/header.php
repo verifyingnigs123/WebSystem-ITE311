@@ -341,6 +341,13 @@
                             <span>Materials</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= uri_string() === 'announcements' ? 'active-page' : '' ?>" 
+                           href="<?= base_url('/announcements') ?>">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Announcements</span>
+                        </a>
+                    </li>
 
                 <!-- Role-based links: STUDENT -->
                 <?php elseif (session()->get('userRole') === 'student'): ?>
@@ -356,6 +363,13 @@
                            href="<?= base_url('/student/grades') ?>">
                             <i class="fas fa-star"></i>
                             <span>My Grades</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= uri_string() === 'announcements' ? 'active-page' : '' ?>" 
+                           href="<?= base_url('/announcements') ?>">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Announcements</span>
                         </a>
                     </li>
                 <?php endif; ?>

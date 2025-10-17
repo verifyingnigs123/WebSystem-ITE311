@@ -21,6 +21,13 @@ $routes->post('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
 $routes->get('/dashboard', 'Auth::dashboard');
 
+// Announcements route
+$routes->get('/announcements', 'Announcement::index');
+
+// Role-based dashboard routes (protected by RoleAuth filter)
+$routes->get('/teacher/dashboard', 'Teacher::dashboard', ['filter' => 'roleauth']);
+$routes->get('/admin/dashboard', 'Admin::dashboard', ['filter' => 'roleauth']);
+
 // Course enrollment routes
 $routes->post('/course/enroll', 'Course::enroll');
 $routes->get('/course/enrolled', 'Course::getEnrolledCourses');
@@ -31,10 +38,10 @@ $routes->post('/course/create', 'Course::create');
 $routes->get('/course/teacher-courses', 'Course::getTeacherCourses');
 $routes->get('/course/all-available', 'Course::getAllAvailableCourses');
 
-// Teacher dashboard routes
-$routes->get('/teacher/add-course', 'Teacher::addCourse');
-$routes->get('/teacher/manage-courses', 'Teacher::manageCourses');
-$routes->get('/teacher/manage-students', 'Teacher::manageStudents');
+// Teacher dashboard routes (protected by RoleAuth filter)
+$routes->get('/teacher/add-course', 'Teacher::addCourse', ['filter' => 'roleauth']);
+$routes->get('/teacher/manage-courses', 'Teacher::manageCourses', ['filter' => 'roleauth']);
+$routes->get('/teacher/manage-students', 'Teacher::manageStudents', ['filter' => 'roleauth']);
 $routes->post('/course/update/(:num)', 'Course::update/$1');
 $routes->post('/course/delete/(:num)', 'Course::delete/$1');
 $routes->get('/course/get/(:num)', 'Course::get/$1');

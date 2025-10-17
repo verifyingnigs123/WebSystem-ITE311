@@ -85,8 +85,8 @@ class Auth extends BaseController
                        'userRole' => $user['role'],
                    ]);
 
-                   // Redirect to unified dashboard
-                   return redirect()->to(base_url('dashboard'));
+                   // Redirect based on user role
+                   return $this->redirectBasedOnRole($user['role']);
                }
        
                return redirect()->back()->with('login_error', 'Invalid credentials');
@@ -197,6 +197,15 @@ class Auth extends BaseController
      */
     private function redirectBasedOnRole($role)
     {
-        return redirect()->to(base_url('dashboard'));
+        switch ($role) {
+            case 'student':
+                return redirect()->to(base_url('announcements'));
+            case 'teacher':
+                return redirect()->to(base_url('teacher/dashboard'));
+            case 'admin':
+                return redirect()->to(base_url('admin/dashboard'));
+            default:
+                return redirect()->to(base_url('dashboard'));
+        }
     }
 }
