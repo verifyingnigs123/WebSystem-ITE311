@@ -29,6 +29,153 @@
     <?php elseif (($userRole ?? '') === 'teacher'): ?>
       <!-- Teacher Dashboard -->
       
+            <div class="col-12">
+        <!-- Teacher Action Buttons -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="d-flex flex-wrap gap-2">
+              <a href="<?= base_url('teacher/add-course') ?>" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Add New Course
+              </a>
+              <a href="<?= base_url('teacher/manage-courses') ?>" class="btn btn-success btn-lg">
+                <i class="fas fa-book"></i> Manage Courses
+              </a>
+              <a href="<?= base_url('teacher/manage-students') ?>" class="btn btn-info btn-lg">
+                <i class="fas fa-users"></i> Manage Students
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="card bg-success text-white">
+              <div class="card-body">
+                <h5 class="card-title">My Courses</h5>
+                <h2 class="card-text"><?= count($teacherCourses ?? []) ?></h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card bg-info text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2 class="card-text"><?= array_sum(array_column($teacherCourses ?? [], 'students')) ?></h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher Details -->
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card shadow">
+              <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">My Courses</h5>
+                <button class="btn btn-light btn-sm" onclick="refreshCourses()">
+                  <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="teacher-courses-list">
+                  <?php if (!empty($teacherCourses ?? [])): ?>
+                    <div class="list-group list-group-flush">
+                      <?php foreach ($teacherCourses as $course): ?>
+                        <div class="list-group-item">
+                          <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                              <h6 class="mb-1"><?= esc($course['course_name'] ?? '') ?></h6>
+                              <p class="mb-1 text-muted">Code: <?= esc($course['course_code'] ?? '') ?></p>
+                              <p class="mb-1"><?= esc($course['description'] ?? 'No description') ?></p>
+                              <small class="text-muted">
+                                Units: <?= esc($course['units'] ?? 3) ?> | 
+                                Students: <?= esc($course['students'] ?? 0) ?> | 
+                                Created: <?= esc($course['created_at'] ?? 'N/A') ?>
+                              </small>
+                            </div>
+                            <div class="text-end">
+                              <span class="badge bg-success"><?= esc($course['status'] ?? 'Active') ?></span>
+                            </div>
+                          </div>
+                        </div>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php else: ?>
+                    <div class="text-center py-4">
+                      <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                      <p class="text-muted">No courses created yet.</p>
+                      <p class="text-muted">Click "Add New Course" to create your first course!</p>
+                    </div>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card shadow">
+              <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Notifications</h5>
+              </div>
+              <div class="card-body">
+                <?php if (!empty($notifications ?? [])): ?>
+                  <div class="list-group list-group-flush">
+                    <?php foreach ($notifications as $note): ?>
+                      <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h6 class="mb-1"><?= esc($note['message'] ?? '') ?></h6>
+                          <small><?= esc($note['time'] ?? '') ?></small>
+                        </div>
+                        <small class="text-muted">Type: <?= esc($note['type'] ?? '') ?></small>
+                      </div>
+                    <?php endforeach; ?>
+                  </div>
+                <?php else: ?>
+                  <p class="text-muted">No notifications.</p>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Course Modal -->
+        <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form id="addCourseForm">
+                <?= csrf_field() ?>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="course_code" class="form-label">Course Code *</label>
+                    <input type="text" class="form-control" id="course_code" name="course_code" required>
+                    <div class="form-text">e.g., CS101, MATH201</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="course_name" class="form-label">Course Name *</label>
+                    <input type="text" class="form-control" id="course_name" name="course_name" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="units" class="form-label">Units</label>
+                    <input type="number" class="form-control" id="units" name="units" min="1" max="6" value="3">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-primary" id="saveCourseBtn">Create Course</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <?php elseif (($userRole ?? '') === 'student'): ?>
       <!-- Student Dashboard -->

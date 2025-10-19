@@ -38,6 +38,11 @@ $routes->post('/course/create', 'Course::create');
 $routes->get('/course/teacher-courses', 'Course::getTeacherCourses');
 $routes->get('/course/all-available', 'Course::getAllAvailableCourses');
 
+// Teacher dashboard routes
+$routes->get('/teacher/add-course', 'Teacher::addCourse');
+$routes->get('/teacher/manage-courses', 'Teacher::manageCourses');
+$routes->get('/teacher/manage-students', 'Teacher::manageStudents');
+
 // Teacher dashboard routes (protected by RoleAuth filter)
 $routes->get('/teacher/add-course', 'Teacher::addCourse', ['filter' => 'roleauth']);
 $routes->get('/teacher/manage-courses', 'Teacher::manageCourses', ['filter' => 'roleauth']);
