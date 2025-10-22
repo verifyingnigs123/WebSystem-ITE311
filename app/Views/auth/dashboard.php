@@ -146,7 +146,7 @@
                 <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form id="addCourseForm">
+              <form action="<?= base_url('course/create') ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                   <div class="mb-3">
@@ -169,7 +169,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="submit" class="btn btn-primary" id="saveCourseBtn">Create Course</button>
+                  <button type="submit" class="btn btn-primary">Create Course</button>
                 </div>
               </form>
             </div>
@@ -438,7 +438,10 @@ $(document).ready(function() {
         $.ajax({
             url: '<?= base_url('course/enroll') ?>',
             type: 'POST',
-            data: { course_id: courseId },
+            data: {
+                course_id: courseId,
+                '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+            },
             dataType: 'json',
             timeout: 10000
         })
@@ -531,14 +534,61 @@ $(document).ready(function() {
             }
         })
         .done(function(response) {
+            console.log('Course creation response:', response);
             if (response && response.success) {
-                showTeacherAlert('success', response.message);
+                // Show success popup/modal before refreshing
                 $('#addCourseModal').modal('hide');
                 $('#addCourseForm')[0].reset();
-                refreshCourses();
-                updateCourseCount();
-                if (typeof toastr !== 'undefined') toastr.success(response.message);
+
+                // Create and show success modal
+                var successModal = `
+                    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title" id="successModalLabel">
+                                        <i class="fas fa-check-circle me-2"></i>Success!
+                                    </h5>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                                    <p class="mb-0">${response.message}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success" id="successOkBtn">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                $('body').append(successModal);
+                $('#successModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $('#successModal').modal('show');
+
+                // Handle OK button click to refresh
+                $('#successOkBtn').on('click', function() {
+                    $('#successModal').modal('hide');
+                });
+
+                $('#successModal').on('hidden.bs.modal', function() {
+                    $(this).remove();
+                    refreshCourses();
+                    updateCourseCount();
+                });
+
+                // Auto-refresh after 3 seconds if user doesn't click OK
+                setTimeout(function() {
+                    if ($('#successModal').hasClass('show')) {
+                        $('#successModal').modal('hide');
+                    }
+                }, 3000);
+
             } else {
+                console.log('Course creation failed:', response);
                 showTeacherAlert('danger', (response && response.message) ? response.message : 'Failed to create course. Please try again.');
             }
         })

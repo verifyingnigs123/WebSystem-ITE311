@@ -20,42 +20,39 @@ class Course extends BaseController
 
     /**
      * Handle course enrollment via AJAX
-     * 
+     *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function enroll()
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
-        // Debug logging
-        log_message('info', 'Enrollment attempt - Method: ' . $this->request->getMethod());
-        log_message('info', 'Enrollment attempt - POST data: ' . json_encode($this->request->getPost()));
-        log_message('info', 'Enrollment attempt - Session data: ' . json_encode(session()->get()));
-        log_message('info', 'Enrollment attempt - Request headers: ' . json_encode($this->request->getHeaders()));
-        
-        // Note: CSRF validation removed for now to fix the error
-        
+
         // Check if user is logged in
         if (!session()->get('isLoggedIn')) {
-            log_message('warning', 'Enrollment attempt by non-logged-in user');
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'You must be logged in to enroll in courses.'
             ]);
         }
 
-        // Get user ID from session
+        // Check if user is a student (only students can enroll)
+        $userRole = session()->get('userRole');
+        if ($userRole !== 'student') {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Only students can enroll in courses.'
+            ]);
+        }
+
+        // Get user ID from session (prevent data tampering)
         $user_id = session()->get('user_id');
-        log_message('info', 'Enrollment attempt - User ID: ' . $user_id);
-        
+
         // Get course ID from POST request
         $course_id = $this->request->getPost('course_id');
-        log_message('info', 'Enrollment attempt - Course ID: ' . $course_id);
 
         // Validate course ID
         if (!$course_id || !is_numeric($course_id)) {
-            log_message('warning', 'Enrollment attempt with invalid course ID: ' . $course_id);
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Invalid course ID.'
@@ -87,21 +84,16 @@ class Course extends BaseController
         ];
 
         // Insert enrollment record
-        log_message('info', 'Enrollment attempt - Inserting enrollment data: ' . json_encode($enrollmentData));
         $enrollmentId = $this->enrollmentModel->enrollUser($enrollmentData);
-        log_message('info', 'Enrollment attempt - Enrollment ID returned: ' . $enrollmentId);
 
         if ($enrollmentId) {
-            log_message('info', 'Enrollment successful - ID: ' . $enrollmentId);
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Successfully enrolled in ' . $course['course_name'] . '!',
                 'enrollment_id' => $enrollmentId
             ]);
         } else {
-            log_message('error', 'Enrollment failed - No enrollment ID returned');
             $errors = $this->enrollmentModel->errors();
-            log_message('error', 'Enrollment errors: ' . json_encode($errors));
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Failed to enroll in course. Please try again.'
@@ -165,38 +157,27 @@ class Course extends BaseController
 
     /**
      * Create a new course (for teachers)
-     * 
+     *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function create()
     {
-        // Set JSON response header
-        $this->response->setContentType('application/json');
-        
-        // Note: CSRF validation removed for now to fix the error
-        
         // Test database connection
         if (!$this->courseModel->testConnection()) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Database connection failed. Please contact the administrator.'
-            ]);
+            session()->setFlashdata('error', 'Database connection failed. Please contact the administrator.');
+            return redirect()->back();
         }
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'You must be logged in to create courses.'
-            ]);
+            session()->setFlashdata('error', 'You must be logged in to create courses.');
+            return redirect()->back();
         }
 
         $userRole = session()->get('userRole');
         if ($userRole !== 'teacher') {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Only teachers can create courses.'
-            ]);
+            session()->setFlashdata('error', 'Only teachers can create courses.');
+            return redirect()->back();
         }
 
         // Get form data
@@ -210,18 +191,14 @@ class Course extends BaseController
 
         // Validate required fields
         if (empty($courseCode) || empty($courseName)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Course code and name are required.'
-            ]);
+            session()->setFlashdata('error', 'Course code and name are required.');
+            return redirect()->back();
         }
 
         // Check if course code already exists
         if ($this->courseModel->courseCodeExists($courseCode)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'A course with this code already exists. Please use a different course code.'
-            ]);
+            session()->setFlashdata('error', 'A course with this code already exists. Please use a different course code.');
+            return redirect()->back();
         }
 
         // Prepare course data
@@ -244,60 +221,50 @@ class Course extends BaseController
             if (!$this->courseModel->insert($courseData)) {
                 $errors = $this->courseModel->errors();
                 $dbError = $this->db->error();
-                
+
                 $errorMessage = 'Failed to create course. ';
-                
+
                 if (!empty($errors)) {
                     $errorMessage .= 'Validation errors: ' . implode(', ', $errors);
                 }
-                
+
                 if (!empty($dbError['message'])) {
                     $errorMessage .= ' Database error: ' . $dbError['message'];
                 }
-                
+
                 // Log the error for debugging
                 log_message('error', 'Course creation failed: ' . $errorMessage);
                 log_message('error', 'Course data: ' . json_encode($courseData));
-                
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => $errorMessage
-                ]);
+
+                session()->setFlashdata('error', $errorMessage);
+                return redirect()->back();
             }
 
             // Get the inserted course ID
             $courseId = $this->courseModel->getInsertID();
-            
+
             if ($courseId) {
                 // Get the created course with teacher info for response
                 $createdCourse = $this->courseModel->getCourseWithTeacher($courseId);
-                
+
                 log_message('info', 'Course created successfully with ID: ' . $courseId);
-                
-                return $this->response->setJSON([
-                    'success' => true,
-                    'message' => 'Course "' . $courseName . '" created successfully!',
-                    'course_id' => $courseId,
-                    'course' => $createdCourse
-                ]);
+
+                session()->setFlashdata('success', 'Course "' . $courseName . '" created successfully!');
+                return redirect()->back();
             } else {
                 log_message('error', 'Course creation failed - no insert ID returned');
-                
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Failed to create course. Please try again.'
-                ]);
+
+                session()->setFlashdata('error', 'Failed to create course. Please try again.');
+                return redirect()->back();
             }
         } catch (\Exception $e) {
             // Log the exception for debugging
             log_message('error', 'Course creation exception: ' . $e->getMessage());
             log_message('error', 'Exception trace: ' . $e->getTraceAsString());
             log_message('error', 'Course data: ' . json_encode($courseData));
-            
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'An error occurred while creating the course: ' . $e->getMessage()
-            ]);
+
+            session()->setFlashdata('error', 'An error occurred while creating the course: ' . $e->getMessage());
+            return redirect()->back();
         }
     }
 
