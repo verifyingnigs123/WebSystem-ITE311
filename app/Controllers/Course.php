@@ -250,7 +250,7 @@ class Course extends BaseController
                 log_message('info', 'Course created successfully with ID: ' . $courseId);
 
                 session()->setFlashdata('success', 'Course "' . $courseName . '" created successfully!');
-                return redirect()->back();
+                return redirect()->to('/teacher/manage-courses');
             } else {
                 log_message('error', 'Course creation failed - no insert ID returned');
 
@@ -270,14 +270,14 @@ class Course extends BaseController
 
     /**
      * Get courses created by the current teacher
-     * 
+     *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function getTeacherCourses()
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
             return $this->response->setJSON([
@@ -297,9 +297,21 @@ class Course extends BaseController
         $teacherId = session()->get('user_id');
         $courses = $this->courseModel->getCoursesByTeacher($teacherId);
 
+        // Calculate statistics
+        $totalCourses = count($courses);
+        $totalStudents = array_sum(array_column($courses, 'students'));
+        $activeCourses = $totalCourses; // All courses are considered active for now
+        $pendingCourses = 0; // No pending status in current schema
+
         return $this->response->setJSON([
             'success' => true,
-            'courses' => $courses
+            'courses' => $courses ?: [],
+            'statistics' => [
+                'total_courses' => $totalCourses,
+                'total_students' => $totalStudents,
+                'active_courses' => $activeCourses,
+                'pending_courses' => $pendingCourses
+            ]
         ]);
     }
 
@@ -322,8 +334,8 @@ class Course extends BaseController
     }
 
     /**
-     * Update a course
-     * 
+     * Update course details (for teachers)
+     *
      * @param int $courseId
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -331,9 +343,7 @@ class Course extends BaseController
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
-        // Note: CSRF validation removed for now to fix the error
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
             return $this->response->setJSON([
@@ -350,16 +360,9 @@ class Course extends BaseController
             ]);
         }
 
-        // Check if course exists and belongs to current teacher
+        // Check if course belongs to the teacher
         $course = $this->courseModel->find($courseId);
-        if (!$course) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Course not found.'
-            ]);
-        }
-
-        if ($course['teacher_id'] != session()->get('user_id')) {
+        if (!$course || $course['teacher_id'] != session()->get('user_id')) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'You can only update your own courses.'
@@ -399,20 +402,38 @@ class Course extends BaseController
 
         // Update course
         try {
-            if ($this->courseModel->update($courseId, $updateData)) {
-                return $this->response->setJSON([
-                    'success' => true,
-                    'message' => 'Course updated successfully!'
-                ]);
-            } else {
+            if (!$this->courseModel->update($courseId, $updateData)) {
                 $errors = $this->courseModel->errors();
+                $dbError = $this->db->error();
+
+                $errorMessage = 'Failed to update course. ';
+
+                if (!empty($errors)) {
+                    $errorMessage .= 'Validation errors: ' . implode(', ', $errors);
+                }
+
+                if (!empty($dbError['message'])) {
+                    $errorMessage .= ' Database error: ' . $dbError['message'];
+                }
+
+                log_message('error', 'Course update failed: ' . $errorMessage);
+
                 return $this->response->setJSON([
                     'success' => false,
-                    'message' => 'Failed to update course. ' . implode(', ', $errors)
+                    'message' => $errorMessage
                 ]);
             }
+
+            log_message('info', 'Course updated successfully with ID: ' . $courseId);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Course "' . $courseName . '" updated successfully!',
+                'course_id' => $courseId
+            ]);
         } catch (\Exception $e) {
             log_message('error', 'Course update exception: ' . $e->getMessage());
+
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'An error occurred while updating the course: ' . $e->getMessage()
@@ -421,8 +442,8 @@ class Course extends BaseController
     }
 
     /**
-     * Delete a course
-     * 
+     * Delete course (for teachers)
+     *
      * @param int $courseId
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -430,9 +451,7 @@ class Course extends BaseController
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
-        // Note: CSRF validation removed for now to fix the error
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
             return $this->response->setJSON([
@@ -449,16 +468,9 @@ class Course extends BaseController
             ]);
         }
 
-        // Check if course exists and belongs to current teacher
+        // Check if course belongs to the teacher
         $course = $this->courseModel->find($courseId);
-        if (!$course) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Course not found.'
-            ]);
-        }
-
-        if ($course['teacher_id'] != session()->get('user_id')) {
+        if (!$course || $course['teacher_id'] != session()->get('user_id')) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'You can only delete your own courses.'
@@ -466,29 +478,34 @@ class Course extends BaseController
         }
 
         // Check if course has enrolled students
-        $enrolledStudents = $this->enrollmentModel->getEnrollmentsByCourse($courseId);
-        if (!empty($enrolledStudents)) {
+        $enrollmentCount = $this->enrollmentModel->getCourseEnrollmentCount($courseId);
+        if ($enrollmentCount > 0) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Cannot delete course with enrolled students. Please remove all students first.'
+                'message' => 'Cannot delete course with enrolled students. Please unenroll all students first.'
             ]);
         }
 
         // Delete course
         try {
-            if ($this->courseModel->delete($courseId)) {
-                return $this->response->setJSON([
-                    'success' => true,
-                    'message' => 'Course deleted successfully!'
-                ]);
-            } else {
+            if (!$this->courseModel->delete($courseId)) {
+                log_message('error', 'Course deletion failed for ID: ' . $courseId);
+
                 return $this->response->setJSON([
                     'success' => false,
                     'message' => 'Failed to delete course. Please try again.'
                 ]);
             }
+
+            log_message('info', 'Course deleted successfully with ID: ' . $courseId);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Course "' . $course['course_name'] . '" deleted successfully!'
+            ]);
         } catch (\Exception $e) {
             log_message('error', 'Course deletion exception: ' . $e->getMessage());
+
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'An error occurred while deleting the course: ' . $e->getMessage()
@@ -497,8 +514,8 @@ class Course extends BaseController
     }
 
     /**
-     * Get a specific course
-     * 
+     * Get single course details
+     *
      * @param int $courseId
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -506,7 +523,7 @@ class Course extends BaseController
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
             return $this->response->setJSON([
@@ -523,20 +540,12 @@ class Course extends BaseController
             ]);
         }
 
-        // Get course
+        // Get course details
         $course = $this->courseModel->find($courseId);
-        if (!$course) {
+        if (!$course || $course['teacher_id'] != session()->get('user_id')) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Course not found.'
-            ]);
-        }
-
-        // Check if course belongs to current teacher
-        if ($course['teacher_id'] != session()->get('user_id')) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'You can only view your own courses.'
+                'message' => 'Course not found or access denied.'
             ]);
         }
 
@@ -583,7 +592,7 @@ class Course extends BaseController
 
     /**
      * Get student details
-     * 
+     *
      * @param int $studentId
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -591,7 +600,7 @@ class Course extends BaseController
     {
         // Set JSON response header
         $this->response->setContentType('application/json');
-        
+
         // Check if user is logged in and is a teacher
         if (!session()->get('isLoggedIn')) {
             return $this->response->setJSON([
@@ -622,4 +631,6 @@ class Course extends BaseController
             'student' => $student
         ]);
     }
+
+
 }
