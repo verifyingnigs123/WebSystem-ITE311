@@ -4,6 +4,23 @@
 
 <?= $this->section('content') ?>
 <div class="container py-5">
+    <!-- Flash Messages -->
+    <?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <?= session()->getFlashdata('success') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <?= session()->getFlashdata('error') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
+
     <!-- Header -->
     <div class="row mb-4">
         <div class="col-12">
@@ -12,6 +29,8 @@
                     <i class="fas fa-book me-2"></i>My Courses
                 </h2>
                 <div>
+                    <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
                     <a href="<?= base_url('teacher/add-course') ?>" class="btn btn-primary me-2">
                         <i class="fas fa-plus me-1"></i>Add New Course
                     </a>
@@ -161,20 +180,33 @@ $(document).ready(function() {
     });
     
     function loadCourses() {
+        // Show loading state
+        $('#courses-list').html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Loading courses...</p></div>');
+
         $.ajax({
             url: '<?= base_url('course/getTeacherCourses') ?>',
             type: 'GET',
             dataType: 'json',
+            timeout: 10000, // 10 second timeout
             success: function(response) {
+                console.log('AJAX Response:', response); // Debug log
                 if (response.success) {
                     displayCourses(response.courses || []);
-                    updateStatistics(response.courses || []);
+                    updateStatistics(response.statistics || {});
                 } else {
-                    showAlert('danger', 'Failed to load courses.');
+                    showAlert('danger', response.message || 'Failed to load courses.');
+                    // Show empty state on failure
+                    displayCourses([]);
+                    updateStatistics({});
                 }
             },
-            error: function() {
-                $('#courses-list').html('<div class="text-center py-4"><p class="text-danger">Failed to load courses. Please try again.</p></div>');
+            error: function(xhr, status, error) {
+                console.log('AJAX Error:', status, error, xhr.responseText);
+                showAlert('danger', 'Failed to load courses. Please check your connection and try again.');
+                // Show error state
+                $('#courses-list').html('<div class="text-center py-4"><i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i><p class="text-danger">Failed to load courses. Please try again.</p><button class="btn btn-primary" onclick="loadCourses()">Retry</button></div>');
+                // Reset statistics to 0 on error
+                updateStatistics({});
             }
         });
     }
@@ -225,16 +257,11 @@ $(document).ready(function() {
         }
     }
     
-    function updateStatistics(courses) {
-        var totalCourses = courses.length;
-        var totalStudents = courses.reduce(function(sum, course) { return sum + (course.students || 0); }, 0);
-        var activeCourses = courses.filter(function(course) { return course.status === 'Active'; }).length;
-        var pendingCourses = courses.filter(function(course) { return course.status === 'Pending'; }).length;
-        
-        $('#total-courses').text(totalCourses);
-        $('#total-students').text(totalStudents);
-        $('#active-courses').text(activeCourses);
-        $('#pending-courses').text(pendingCourses);
+    function updateStatistics(statistics) {
+        $('#total-courses').text(statistics.total_courses || 0);
+        $('#total-students').text(statistics.total_students || 0);
+        $('#active-courses').text(statistics.active_courses || 0);
+        $('#pending-courses').text(statistics.pending_courses || 0);
     }
     
     function formatDate(dateString) {
