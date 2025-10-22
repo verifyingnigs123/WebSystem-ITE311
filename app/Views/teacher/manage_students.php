@@ -131,41 +131,55 @@ $(document).ready(function() {
     loadCourses();
     
     function loadStudents() {
+        // Show loading state
+        $('#students-list').html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Loading students...</p></div>');
+
         $.ajax({
             url: '<?= base_url('course/getTeacherStudents') ?>',
             type: 'GET',
             dataType: 'json',
+            timeout: 10000, // 10 second timeout
             success: function(response) {
+                console.log('Students AJAX Response:', response); // Debug log
                 if (response.success) {
                     displayStudents(response.students || []);
                     updateStatistics(response.students || []);
                 } else {
-                    showAlert('danger', 'Failed to load students.');
+                    showAlert('danger', response.message || 'Failed to load students.');
+                    // Show empty state on failure
+                    displayStudents([]);
+                    updateStatistics([]);
                 }
             },
-            error: function() {
-                $('#students-list').html('<div class="text-center py-4"><p class="text-danger">Failed to load students. Please try again.</p></div>');
+            error: function(xhr, status, error) {
+                console.log('Students AJAX Error:', status, error, xhr.responseText);
+                showAlert('danger', 'Failed to load students. Please check your connection and try again.');
+                // Show error state
+                $('#students-list').html('<div class="text-center py-4"><i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i><p class="text-danger">Failed to load students. Please try again.</p><button class="btn btn-primary" onclick="loadStudents()">Retry</button></div>');
+                // Reset statistics to 0 on error
+                updateStatistics([]);
             }
         });
     }
     
     function loadCourses() {
         $.ajax({
-            url: '<?= base_url('course/getTeacherCourses') ?>',
+            url: '<?= base_url('course/teacher-courses') ?>',
             type: 'GET',
             dataType: 'json',
             success: function(response) {
+                console.log('Courses AJAX Response:', response); // Debug log
                 if (response.success) {
                     var courseFilter = $('#courseFilter');
                     courseFilter.html('<option value="">All Courses</option>');
-                    
+
                     response.courses.forEach(function(course) {
                         courseFilter.append('<option value="' + course.course_id + '">' + course.course_name + ' (' + course.course_code + ')</option>');
                     });
                 }
             },
-            error: function() {
-                console.error('Failed to load courses for filter');
+            error: function(xhr, status, error) {
+                console.error('Failed to load courses for filter:', status, error);
             }
         });
     }

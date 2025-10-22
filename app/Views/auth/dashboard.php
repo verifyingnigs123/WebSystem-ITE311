@@ -43,6 +43,9 @@
               <a href="<?= base_url('teacher/manage-students') ?>" class="btn btn-info btn-lg">
                 <i class="fas fa-users"></i> Manage Students
               </a>
+              <a href="<?= base_url('admin/course/' . ($teacherCourses[0]['course_id'] ?? '1') . '/upload') ?>" class="btn btn-warning btn-lg">
+                <i class="fas fa-upload"></i> Upload Materials
+              </a>
             </div>
           </div>
         </div>
