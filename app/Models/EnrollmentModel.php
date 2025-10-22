@@ -162,25 +162,25 @@ class EnrollmentModel extends Model
 
     /**
      * Get students enrolled in teacher's courses
-     * 
+     *
      * @param int $teacherId The teacher ID
      * @return array Array of student enrollment records
      */
     public function getStudentsByTeacher($teacherId)
     {
         $builder = $this->db->table('enrollments e');
-        $builder->select('e.*, c.course_name, c.course_code, u.name as student_name, u.email');
+        $builder->select('e.*, c.course_name, c.course_code, u.name as student_name, u.email, e.status');
         $builder->join('courses c', 'e.course_id = c.course_id', 'left');
         $builder->join('users u', 'e.user_id = u.id', 'left');
         $builder->where('c.teacher_id', $teacherId);
         $builder->orderBy('e.enrollment_date', 'DESC');
-        
+
         return $builder->get()->getResultArray();
     }
 
     /**
      * Get student details
-     * 
+     *
      * @param int $studentId The student ID
      * @return array|null Student details or null if not found
      */
@@ -190,7 +190,36 @@ class EnrollmentModel extends Model
         $builder->select('u.*');
         $builder->where('u.id', $studentId);
         $builder->where('u.role', 'student');
-        
+
         return $builder->get()->getRowArray();
+    }
+
+    /**
+     * Get enrollment statistics by teacher
+     *
+     * @param int $teacherId The teacher ID
+     * @return array Array with active and pending counts
+     */
+    public function getEnrollmentStatsByTeacher($teacherId)
+    {
+        $builder = $this->db->table('enrollments e');
+        $builder->select('e.status, COUNT(DISTINCT c.course_id) as course_count');
+        $builder->join('courses c', 'e.course_id = c.course_id', 'left');
+        $builder->where('c.teacher_id', $teacherId);
+        $builder->groupBy('e.status');
+
+        $results = $builder->get()->getResultArray();
+
+        $stats = ['active' => 0, 'pending' => 0];
+
+        foreach ($results as $result) {
+            if ($result['status'] === 'active') {
+                $stats['active'] = (int) $result['course_count'];
+            } elseif ($result['status'] === 'pending') {
+                $stats['pending'] = (int) $result['course_count'];
+            }
+        }
+
+        return $stats;
     }
 }

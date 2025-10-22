@@ -99,13 +99,52 @@ class CourseModel extends Model
     public function getCoursesByTeacher($teacherId)
     {
         $builder = $this->db->table('courses c');
-        $builder->select('c.*, COUNT(e.enrollment_id) as students');
-        $builder->join('enrollments e', 'c.course_id = e.course_id', 'left');
+        $builder->select('c.*, COUNT(e.enrollment_id) as total_students');
+        $builder->join('enrollments e', 'c.course_id = e.course_id AND e.status IN ("enrolled", "active")', 'left');
         $builder->where('c.teacher_id', $teacherId);
         $builder->groupBy('c.course_id');
         $builder->orderBy('c.created_at', 'DESC');
-        
+
         return $builder->get()->getResultArray();
+    }
+
+    /**
+     * Get teacher statistics including total students, active courses, total courses, and pending courses
+     */
+    public function getTeacherStatistics($teacherId)
+    {
+        // Get total students (enrolled or active in teacher's courses)
+        $totalStudents = $this->db->table('enrollments e')
+            ->join('courses c', 'e.course_id = c.course_id')
+            ->where('c.teacher_id', $teacherId)
+            ->whereIn('e.status', ['enrolled', 'active'])
+            ->countAllResults();
+
+        // Get total courses taught by teacher
+        $totalCourses = $this->where('teacher_id', $teacherId)->countAllResults();
+
+        // Get active courses (courses with enrolled/active students)
+        $activeCourses = $this->db->table('courses c')
+            ->join('enrollments e', 'c.course_id = e.course_id')
+            ->where('c.teacher_id', $teacherId)
+            ->whereIn('e.status', ['enrolled', 'active'])
+            ->distinct()
+            ->countAllResults();
+
+        // Get pending courses (courses with pending enrollments)
+        $pendingCourses = $this->db->table('courses c')
+            ->join('enrollments e', 'c.course_id = e.course_id')
+            ->where('c.teacher_id', $teacherId)
+            ->where('e.status', 'pending')
+            ->distinct()
+            ->countAllResults();
+
+        return [
+            'total_students' => $totalStudents,
+            'total_courses' => $totalCourses,
+            'active_courses' => $activeCourses,
+            'pending_courses' => $pendingCourses,
+        ];
     }
 
     /**

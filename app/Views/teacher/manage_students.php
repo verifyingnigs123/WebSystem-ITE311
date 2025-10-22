@@ -126,9 +126,10 @@
 
 <script>
 $(document).ready(function() {
-    // Load students and courses on page load
+    // Load students, courses, and statistics on page load
     loadStudents();
     loadCourses();
+    loadStatistics();
     
     function loadStudents() {
         // Show loading state
@@ -229,13 +230,35 @@ $(document).ready(function() {
     
     function updateStatistics(students) {
         var totalStudents = students.length;
-        var activeEnrollments = students.filter(function(student) { return student.status === 'Active'; }).length;
+        var activeEnrollments = students.filter(function(student) { return student.status === 'enrolled'; }).length;
+        var pendingRequests = students.filter(function(student) { return student.status === 'pending'; }).length;
         var uniqueCourses = [...new Set(students.map(student => student.course_id))].length;
-        
+
         $('#total-students').text(totalStudents);
         $('#active-enrollments').text(activeEnrollments);
         $('#courses-taught').text(uniqueCourses);
-        $('#pending-requests').text('0'); // Placeholder for future feature
+        $('#pending-requests').text(pendingRequests);
+    }
+
+    // Load statistics from server
+    function loadStatistics() {
+        $.ajax({
+            url: '<?= base_url('course/getTeacherCourses') ?>',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var stats = response.statistics;
+                    $('#total-students').text(stats.total_students || 0);
+                    $('#active-enrollments').text(stats.active_courses || 0);
+                    $('#courses-taught').text(stats.total_courses || 0);
+                    $('#pending-requests').text(stats.pending_courses || 0);
+                }
+            },
+            error: function() {
+                console.error('Failed to load statistics');
+            }
+        });
     }
     
     function formatDate(dateString) {

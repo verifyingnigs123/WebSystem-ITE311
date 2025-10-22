@@ -297,21 +297,13 @@ class Course extends BaseController
         $teacherId = session()->get('user_id');
         $courses = $this->courseModel->getCoursesByTeacher($teacherId);
 
-        // Calculate statistics
-        $totalCourses = count($courses);
-        $totalStudents = array_sum(array_column($courses, 'students'));
-        $activeCourses = $totalCourses; // All courses are considered active for now
-        $pendingCourses = 0; // No pending status in current schema
+        // Get accurate statistics from the CourseModel
+        $statistics = $this->courseModel->getTeacherStatistics($teacherId);
 
         return $this->response->setJSON([
             'success' => true,
             'courses' => $courses ?: [],
-            'statistics' => [
-                'total_courses' => $totalCourses,
-                'total_students' => $totalStudents,
-                'active_courses' => $activeCourses,
-                'pending_courses' => $pendingCourses
-            ]
+            'statistics' => $statistics
         ]);
     }
 

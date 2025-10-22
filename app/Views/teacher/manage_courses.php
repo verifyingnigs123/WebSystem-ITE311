@@ -240,7 +240,7 @@ $(document).ready(function() {
                     '<td><strong>' + course.course_code + '</strong></td>' +
                     '<td>' + course.course_name + '</td>' +
                     '<td>' + (course.units || 3) + '</td>' +
-                    '<td><span class="badge bg-info">' + (course.students || 0) + '</span></td>' +
+                    '<td><span class="badge bg-info">' + (course.total_students || 0) + '</span></td>' +
                     '<td><span class="badge bg-success">' + (course.status || 'Active') + '</span></td>' +
                     '<td>' + formatDate(course.created_at) + '</td>' +
                     '<td>' +
