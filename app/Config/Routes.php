@@ -52,3 +52,9 @@ $routes->post('/course/delete/(:num)', 'Course::delete/$1');
 $routes->get('/course/get/(:num)', 'Course::get/$1');
 $routes->get('/course/getTeacherStudents', 'Course::getTeacherStudents');
 $routes->get('/course/getStudentDetails/(:num)', 'Course::getStudentDetails/$1');
+
+// Materials routes
+$routes->get('/admin/course/(:num)/upload', 'Materials::upload/$1');
+$routes->post('/admin/course/(:num)/upload', 'Materials::upload/$1');
+$routes->get('/materials/delete/(:num)', 'Materials::delete/$1');
+$routes->get('/materials/download/(:num)', 'Materials::download/$1');
