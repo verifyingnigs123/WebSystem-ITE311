@@ -58,6 +58,8 @@ $routes->get('/admin/course/(:num)/upload', 'Materials::upload/$1');
 $routes->post('/admin/course/(:num)/upload', 'Materials::upload/$1');
 $routes->get('/materials/delete/(:num)', 'Materials::delete/$1');
 $routes->get('/materials/download/(:num)', 'Materials::download/$1');
+$routes->get('/student/course/(:num)/materials', 'Materials::viewByCourse/$1');
+
 
 // Notification routes
 $routes->get('/notifications', 'Notifications::get');
