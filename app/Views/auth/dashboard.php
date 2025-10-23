@@ -311,9 +311,9 @@
                       </div>
                       <a href="<?= base_url('materials/download/' . $material['id']) ?>"
                          class="btn btn-outline-primary btn-sm"
-                         title="Download Material"
+                         title="View Material"
                          target="_blank">
-                        <i class="fas fa-cloud-download-alt me-1"></i>Download
+                        <i class="fas fa-eye me-1"></i>View
                       </a>
                     </li>
                   <?php endforeach; ?>
