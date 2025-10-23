@@ -281,6 +281,58 @@
             </div>
           </div>
 
+          <!-- Course Materials Section -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Course Materials</h5>
+      </div>
+      <div class="card-body">
+        <?php if (!empty($enrolledCourses ?? [])): ?>
+          <?php foreach ($enrolledCourses as $course): ?>
+            <div class="mb-4">
+              <h6 class="fw-bold text-dark mb-2">
+                <?= esc($course['course_name']) ?> 
+                <small class="text-muted">(<?= esc($course['course_code']) ?>)</small>
+              </h6>
+              <?php 
+                $materials = model('App\Models\MaterialModel')->getMaterialsByCourse($course['course_id']);
+              ?>
+              <?php if (!empty($materials)): ?>
+                <ul class="list-group">
+                  <?php foreach ($materials as $material): ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="fas fa-file me-2 text-secondary"></i>
+                        <?= esc($material['file_name']) ?>
+                        <br>
+                        <small class="text-muted">Uploaded: <?= esc(date('M d, Y', strtotime($material['created_at']))) ?></small>
+                      </div>
+                      <a href="<?= base_url('materials/download/' . $material['id']) ?>" 
+                         class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-download me-1"></i>Download
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              <?php else: ?>
+                <p class="text-muted">No materials uploaded for this course yet.</p>
+              <?php endif; ?>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <div class="text-center py-3">
+            <i class="fas fa-folder-open fa-2x text-muted mb-2"></i>
+            <p class="text-muted">You are not enrolled in any courses yet.</p>
+          </div>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
+</div>
+
+
           <div class="col-md-6">
             <div class="card shadow">
               <div class="card-header bg-success text-white">

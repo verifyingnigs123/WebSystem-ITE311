@@ -204,4 +204,26 @@ class Materials extends BaseController
         // Force download
         return $this->response->download($filePath, null, true)->setFileName($material['file_name']);
     }
+    public function viewByCourse($course_id)
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login')->with('error', 'Please log in first.');
+    }
+
+    // Check enrollment
+    if (session()->get('userRole') === 'student') {
+        if (!$this->enrollmentModel->isUserEnrolled(session()->get('user_id'), $course_id)) {
+            return redirect()->to('/dashboard')->with('error', 'Access denied.');
+        }
+    }
+
+    $course = $this->courseModel->find($course_id);
+    $materials = $this->materialModel->getMaterialsByCourse($course_id);
+
+    return view('student/course_materials', [
+        'course' => $course,
+        'materials' => $materials
+    ]);
+}
+
 }
