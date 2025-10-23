@@ -309,9 +309,11 @@
                         <br>
                         <small class="text-muted">Uploaded: <?= esc(date('M d, Y', strtotime($material['created_at']))) ?></small>
                       </div>
-                      <a href="<?= base_url('materials/download/' . $material['id']) ?>" 
-                         class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-download me-1"></i>Download
+                      <a href="<?= base_url('materials/download/' . $material['id']) ?>"
+                         class="btn btn-outline-primary btn-sm"
+                         title="Download Material"
+                         target="_blank">
+                        <i class="fas fa-cloud-download-alt me-1"></i>Download
                       </a>
                     </li>
                   <?php endforeach; ?>

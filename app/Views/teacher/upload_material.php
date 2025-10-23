@@ -119,9 +119,10 @@
                                         </div>
                                         <div class="ms-3">
                                             <a href="<?= base_url('materials/download/' . $material['id']) ?>"
-                                               class="btn btn-primary btn-sm me-2"
-                                               title="Download">
-                                                <i class="fas fa-download"></i>
+                                               class="btn btn-outline-primary btn-sm me-2"
+                                               title="Download Material"
+                                               target="_blank">
+                                                <i class="fas fa-cloud-download-alt me-1"></i>Download
                                             </a>
                                             <a href="<?= base_url('materials/delete/' . $material['id']) ?>"
                                                class="btn btn-danger btn-sm"
