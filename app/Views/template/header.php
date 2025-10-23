@@ -374,6 +374,26 @@
                     </li>
                 <?php endif; ?>
 
+                <!-- Notifications -->
+                <?php if (session()->get('isLoggedIn')): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                            <?php if (isset($unreadNotificationCount) && $unreadNotificationCount > 0): ?>
+                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notificationBadge">
+                                    <?= $unreadNotificationCount ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown" id="notificationList">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <!-- Notifications will be loaded here via AJAX -->
+                            <li><a class="dropdown-item text-center" href="#" id="viewAllNotifications">View All Notifications</a></li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+
                 <!-- Logout -->
                 <?php if (session()->get('isLoggedIn')): ?>
                     <li class="nav-item ms-lg-2">
@@ -387,3 +407,95 @@
         </div>
     </div>
 </nav>
+
+<!-- Notification JavaScript -->
+<?php if (session()->get('isLoggedIn')): ?>
+<script>
+$(document).ready(function() {
+    // Load notifications on page load
+    loadNotifications();
+
+    // Function to load notifications
+    function loadNotifications() {
+        $.get('<?= base_url('/notifications') ?>')
+            .done(function(data) {
+                if (data.success) {
+                    updateNotificationBadge(data.unread_count);
+                    updateNotificationList(data.notifications);
+                }
+            })
+            .fail(function() {
+                console.error('Failed to load notifications');
+            });
+    }
+
+    // Function to update notification badge
+    function updateNotificationBadge(count) {
+        const badge = $('#notificationBadge');
+        if (count > 0) {
+            badge.text(count).show();
+        } else {
+            badge.hide();
+        }
+    }
+
+    // Function to update notification list
+    function updateNotificationList(notifications) {
+        const list = $('#notificationList');
+        // Clear existing notifications (keep header and view all link)
+        list.find('.notification-item').remove();
+
+        if (notifications.length === 0) {
+            list.find('.dropdown-header').after('<li><a class="dropdown-item text-muted">No notifications</a></li>');
+        } else {
+            notifications.forEach(function(notification) {
+                const notificationClass = notification.is_read == 0 ? 'alert-info' : 'alert-light';
+                const item = `
+                    <li class="notification-item">
+                        <a class="dropdown-item ${notificationClass}" href="#" data-id="${notification.id}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <small>${notification.message}</small>
+                                    <br>
+                                    <small class="text-muted">${new Date(notification.created_at).toLocaleDateString()}</small>
+                                </div>
+                                ${notification.is_read == 0 ? '<button class="btn btn-sm btn-outline-primary ms-2 mark-read-btn" data-id="' + notification.id + '">Mark Read</button>' : ''}
+                            </div>
+                        </a>
+                    </li>
+                `;
+                list.find('.dropdown-header').after(item);
+            });
+        }
+    }
+
+    // Handle mark as read
+    $(document).on('click', '.mark-read-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const notificationId = $(this).data('id');
+        const button = $(this);
+
+        $.post('<?= base_url('/notifications/mark_read/') ?>' + notificationId)
+            .done(function(data) {
+                if (data.success) {
+                    // Remove the notification item
+                    button.closest('.notification-item').remove();
+                    // Update badge
+                    const currentCount = parseInt($('#notificationBadge').text()) || 0;
+                    updateNotificationBadge(currentCount - 1);
+                } else {
+                    alert('Failed to mark notification as read');
+                }
+            })
+            .fail(function() {
+                alert('Error marking notification as read');
+            });
+    });
+
+    // Optional: Refresh notifications every 60 seconds
+    setInterval(loadNotifications, 60000);
+});
+</script>
+<?php endif; ?>
