@@ -380,16 +380,28 @@
                         <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell"></i>
                             <span>Notifications</span>
-                            <?php if (isset($unreadNotificationCount) && $unreadNotificationCount > 0): ?>
-                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notificationBadge">
-                                    <?= $unreadNotificationCount ?>
-                                </span>
-                            <?php endif; ?>
+                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notificationBadge" style="display: none;">0</span>
+                            <span id="connectionIndicator" class="position-absolute top-0 end-0 translate-middle text-success" style="font-size: 8px;">
+                                <i class="fas fa-circle"></i>
+                            </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown" id="notificationList">
-                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown" id="notificationList" style="min-width: 350px; max-height: 400px; overflow-y: auto;">
+                            <li class="dropdown-header d-flex justify-content-between align-items-center">
+                                <span>Notifications</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2" id="markAllReadBtn" title="Mark all as read">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" id="refreshNotifications" title="Refresh">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <!-- Notifications will be loaded here via AJAX -->
-                            <li><a class="dropdown-item text-center" href="#" id="viewAllNotifications">View All Notifications</a></li>
+                            <li><a class="dropdown-item text-center" href="<?= base_url('/notifications/history') ?>" id="viewAllNotifications">
+                                <i class="fas fa-list me-2"></i>View All Notifications
+                            </a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -412,8 +424,21 @@
 <?php if (session()->get('isLoggedIn')): ?>
 <script>
 $(document).ready(function() {
-    // Load notifications on page load
-    loadNotifications();
+    let eventSource = null;
+    let isConnected = false;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+
+    // Initialize notification system
+    initNotificationSystem();
+
+    function initNotificationSystem() {
+        // Load initial notifications
+        loadNotifications();
+        
+        // Start real-time connection
+        startRealTimeConnection();
+    }
 
     // Function to load notifications
     function loadNotifications() {
@@ -427,6 +452,173 @@ $(document).ready(function() {
             .fail(function() {
                 console.error('Failed to load notifications');
             });
+    }
+
+    // Start real-time connection using Server-Sent Events
+    function startRealTimeConnection() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        eventSource = new EventSource('<?= base_url('/notifications/stream') ?>');
+        
+        eventSource.onopen = function() {
+            console.log('Connected to notification stream');
+            isConnected = true;
+            reconnectAttempts = 0;
+            updateConnectionStatus(true);
+        };
+
+        eventSource.addEventListener('connected', function(e) {
+            console.log('Notification stream connected:', e.data);
+        });
+
+        eventSource.addEventListener('notification', function(e) {
+            const notification = JSON.parse(e.data);
+            console.log('New notification received:', notification);
+            addNewNotification(notification);
+        });
+
+        eventSource.addEventListener('heartbeat', function(e) {
+            // Heartbeat received, connection is alive
+            console.log('Heartbeat received:', e.data);
+        });
+
+        eventSource.onerror = function(e) {
+            console.error('EventSource failed:', e);
+            isConnected = false;
+            updateConnectionStatus(false);
+            
+            // Attempt to reconnect
+            if (reconnectAttempts < maxReconnectAttempts) {
+                reconnectAttempts++;
+                console.log(`Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`);
+                setTimeout(startRealTimeConnection, 5000 * reconnectAttempts);
+            } else {
+                console.error('Max reconnection attempts reached. Falling back to polling.');
+                fallbackToPolling();
+            }
+        };
+    }
+
+    // Fallback to polling if SSE fails
+    function fallbackToPolling() {
+        console.log('Falling back to polling mode');
+        setInterval(loadNotifications, 30000); // Poll every 30 seconds
+    }
+
+    // Update connection status indicator
+    function updateConnectionStatus(connected) {
+        const indicator = $('#connectionIndicator');
+        if (connected) {
+            indicator.removeClass('text-danger').addClass('text-success').html('<i class="fas fa-circle"></i>');
+        } else {
+            indicator.removeClass('text-success').addClass('text-danger').html('<i class="fas fa-circle"></i>');
+        }
+    }
+
+    // Add new notification to the list
+    function addNewNotification(notification) {
+        const list = $('#notificationList');
+        
+        // Remove "No notifications" message if it exists
+        list.find('.no-notifications').remove();
+        
+        // Create notification item
+        const notificationClass = notification.is_read == 0 ? 'alert-info' : 'alert-light';
+        const typeIcon = getNotificationTypeIcon(notification.type);
+        const item = `
+            <li class="notification-item">
+                <a class="dropdown-item ${notificationClass}" href="#" data-id="${notification.id}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center">
+                                <i class="${typeIcon} me-2"></i>
+                                <small>${notification.message}</small>
+                            </div>
+                            <br>
+                            <small class="text-muted">${formatNotificationTime(notification.created_at)}</small>
+                        </div>
+                        ${notification.is_read == 0 ? '<button class="btn btn-sm btn-outline-primary ms-2 mark-read-btn" data-id="' + notification.id + '">Mark Read</button>' : ''}
+                    </div>
+                </a>
+            </li>
+        `;
+        
+        // Add to top of list
+        list.find('.dropdown-header').after(item);
+        
+        // Update badge count
+        const currentCount = parseInt($('#notificationBadge').text()) || 0;
+        updateNotificationBadge(currentCount + 1);
+        
+        // Show notification toast
+        showNotificationToast(notification);
+    }
+
+    // Get icon for notification type
+    function getNotificationTypeIcon(type) {
+        const icons = {
+            'info': 'fas fa-info-circle text-info',
+            'success': 'fas fa-check-circle text-success',
+            'warning': 'fas fa-exclamation-triangle text-warning',
+            'error': 'fas fa-exclamation-circle text-danger',
+            'course': 'fas fa-book text-primary',
+            'announcement': 'fas fa-bullhorn text-info',
+            'material': 'fas fa-file-alt text-secondary'
+        };
+        return icons[type] || icons['info'];
+    }
+
+    // Format notification time
+    function formatNotificationTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        
+        if (diff < 60000) { // Less than 1 minute
+            return 'Just now';
+        } else if (diff < 3600000) { // Less than 1 hour
+            return Math.floor(diff / 60000) + ' minutes ago';
+        } else if (diff < 86400000) { // Less than 1 day
+            return Math.floor(diff / 3600000) + ' hours ago';
+        } else {
+            return date.toLocaleDateString();
+        }
+    }
+
+    // Show notification toast
+    function showNotificationToast(notification) {
+        const toastHtml = `
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <i class="${getNotificationTypeIcon(notification.type)} me-2"></i>
+                    <strong class="me-auto">New Notification</strong>
+                    <small class="text-muted">${formatNotificationTime(notification.created_at)}</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${notification.message}
+                </div>
+            </div>
+        `;
+        
+        // Add toast to container
+        if (!$('#notificationToastContainer').length) {
+            $('body').append('<div id="notificationToastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>');
+        }
+        
+        const $toast = $(toastHtml);
+        $('#notificationToastContainer').append($toast);
+        
+        // Show toast
+        const toast = new bootstrap.Toast($toast[0]);
+        toast.show();
+        
+        // Remove toast element after it's hidden
+        $toast.on('hidden.bs.toast', function() {
+            $(this).remove();
+        });
     }
 
     // Function to update notification badge
@@ -446,18 +638,22 @@ $(document).ready(function() {
         list.find('.notification-item').remove();
 
         if (notifications.length === 0) {
-            list.find('.dropdown-header').after('<li><a class="dropdown-item text-muted">No notifications</a></li>');
+            list.find('.dropdown-header').after('<li><a class="dropdown-item text-muted no-notifications">No notifications</a></li>');
         } else {
             notifications.forEach(function(notification) {
                 const notificationClass = notification.is_read == 0 ? 'alert-info' : 'alert-light';
+                const typeIcon = getNotificationTypeIcon(notification.type);
                 const item = `
                     <li class="notification-item">
                         <a class="dropdown-item ${notificationClass}" href="#" data-id="${notification.id}">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1">
-                                    <small>${notification.message}</small>
+                                    <div class="d-flex align-items-center">
+                                        <i class="${typeIcon} me-2"></i>
+                                        <small>${notification.message}</small>
+                                    </div>
                                     <br>
-                                    <small class="text-muted">${new Date(notification.created_at).toLocaleDateString()}</small>
+                                    <small class="text-muted">${formatNotificationTime(notification.created_at)}</small>
                                 </div>
                                 ${notification.is_read == 0 ? '<button class="btn btn-sm btn-outline-primary ms-2 mark-read-btn" data-id="' + notification.id + '">Mark Read</button>' : ''}
                             </div>
@@ -494,8 +690,49 @@ $(document).ready(function() {
             });
     });
 
-    // Optional: Refresh notifications every 60 seconds
-    setInterval(loadNotifications, 60000);
+    // Handle mark all as read
+    $(document).on('click', '#markAllReadBtn', function(e) {
+        e.preventDefault();
+        
+        $.post('<?= base_url('/notifications/mark_all_read') ?>')
+            .done(function(data) {
+                if (data.success) {
+                    // Reload notifications
+                    loadNotifications();
+                    alert('All notifications marked as read');
+                } else {
+                    alert('Failed to mark all notifications as read');
+                }
+            })
+            .fail(function() {
+                alert('Error marking all notifications as read');
+            });
+    });
+
+    // Handle refresh notifications
+    $(document).on('click', '#refreshNotifications', function(e) {
+        e.preventDefault();
+        
+        // Add loading state
+        const button = $(this);
+        const originalIcon = button.html();
+        button.html('<i class="fas fa-spinner fa-spin"></i>');
+        
+        // Reload notifications
+        loadNotifications();
+        
+        // Reset button after a short delay
+        setTimeout(function() {
+            button.html(originalIcon);
+        }, 1000);
+    });
+
+    // Clean up on page unload
+    $(window).on('beforeunload', function() {
+        if (eventSource) {
+            eventSource.close();
+        }
+    });
 });
 </script>
 <?php endif; ?>

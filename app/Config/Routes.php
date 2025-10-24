@@ -64,3 +64,9 @@ $routes->get('/student/course/(:num)/materials', 'Materials::viewByCourse/$1');
 // Notification routes
 $routes->get('/notifications', 'Notifications::get');
 $routes->post('/notifications/mark_read/(:num)', 'Notifications::mark_as_read/$1');
+$routes->get('/notifications/stream', 'Notifications::stream');
+$routes->post('/notifications/mark_all_read', 'Notifications::mark_all_read');
+$routes->get('/notifications/history', 'Notifications::history');
+$routes->get('/notifications/history/page', 'Notifications::history');
+$routes->post('/notifications/test', 'Notifications::test');
+$routes->get('/notifications/test', 'Notifications::test_page');
