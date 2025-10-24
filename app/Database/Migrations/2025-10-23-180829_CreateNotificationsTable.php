@@ -24,6 +24,11 @@ class CreateNotificationsTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'type' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '50',
+                'default'    => 'info',
+            ],
             'is_read' => [
                 'type'       => 'TINYINT',
                 'constraint' => 1,
