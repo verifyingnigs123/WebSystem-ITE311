@@ -267,7 +267,7 @@
 <nav class="navbar navbar-expand-lg navbar-dashboard">
     <div class="container">
         <!-- Brand -->
-        <a class="navbar-brand" href="<?= base_url('/') ?>">
+        <a class="navbar-brand" href="<?= base_url('/dashboard') ?>">
             <i class="fas fa-rocket"></i>
             ITE311-VISAYAS
         </a>

@@ -1,0 +1,20 @@
+CRITICAL - 2025-10-23 19:07:17 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\EnrollmentModel::isUserEnrolled
+[Method: GET, Route: materials/download/4]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Materials.php(183): CodeIgniter\Model->__call('isUserEnrolled', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Materials->download('4')
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Materials))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-10-23 19:12:16 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\EnrollmentModel::isUserEnrolled
+[Method: GET, Route: materials/download/4]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Materials.php(183): CodeIgniter\Model->__call('isUserEnrolled', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Materials->download('4')
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Materials))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
