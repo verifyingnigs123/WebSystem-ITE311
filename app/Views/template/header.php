@@ -331,7 +331,7 @@
                         <a class="nav-link <?= strpos(uri_string(), 'teacher/classes') !== false ? 'active-page' : '' ?>" 
                            href="<?= base_url('/teacher/classes') ?>">
                             <i class="fas fa-chalkboard-teacher"></i>
-                            <span>My Classes</span>
+                            <span>Classes</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -345,7 +345,6 @@
                         <a class="nav-link <?= uri_string() === 'announcements' ? 'active-page' : '' ?>" 
                            href="<?= base_url('/announcements') ?>">
                             <i class="fas fa-bullhorn"></i>
-                            <span>Announcements</span>
                         </a>
                     </li>
 
@@ -355,21 +354,20 @@
                         <a class="nav-link <?= strpos(uri_string(), 'student/courses') !== false ? 'active-page' : '' ?>" 
                            href="<?= base_url('/student/courses') ?>">
                             <i class="fas fa-graduation-cap"></i>
-                            <span>My Courses</span>
+                            <span>Courses</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= strpos(uri_string(), 'student/grades') !== false ? 'active-page' : '' ?>" 
                            href="<?= base_url('/student/grades') ?>">
                             <i class="fas fa-star"></i>
-                            <span>My Grades</span>
+                            <span>Grades</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= uri_string() === 'announcements' ? 'active-page' : '' ?>" 
                            href="<?= base_url('/announcements') ?>">
                             <i class="fas fa-bullhorn"></i>
-                            <span>Announcements</span>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -379,7 +377,6 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell"></i>
-                            <span>Notifications</span>
                             <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notificationBadge" style="display: none;">0</span>
                             <span id="connectionIndicator" class="position-absolute top-0 end-0 translate-middle text-success" style="font-size: 8px;">
                                 <i class="fas fa-circle"></i>
