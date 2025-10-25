@@ -304,24 +304,6 @@
       </div>
 
     <?php elseif (($userRole ?? '') === 'teacher'): ?>
-      <!-- Teacher Dashboard -->
-      <div class="row">
-        <div class="col-12">
-          <!-- Action Buttons -->
-          <div class="action-buttons mb-4">
-            <a href="<?= base_url('teacher/add-course') ?>" class="btn-action">
-              <i class="fas fa-plus"></i> Add New Course
-            </a>
-            <a href="<?= base_url('teacher/manage-courses') ?>" class="btn-action">
-              <i class="fas fa-book"></i> Manage Courses
-            </a>
-            <a href="<?= base_url('teacher/manage-students') ?>" class="btn-action">
-              <i class="fas fa-users"></i> Manage Students
-            </a>
-            <a href="<?= base_url('admin/course/' . ($teacherCourses[0]['course_id'] ?? '1') . '/upload') ?>" class="btn-action">
-              <i class="fas fa-upload"></i> Upload Materials
-            </a>
-          </div>
 
           <!-- Stats Cards -->
           <div class="row mb-4">
@@ -345,48 +327,93 @@
             </div>
           </div>
 
-          <!-- Courses List -->
-          <div class="content-card">
-            <div class="card-header-custom d-flex justify-content-between align-items-center">
-              <h5><i class="fas fa-graduation-cap"></i> My Courses</h5>
-              <button class="refresh-btn" onclick="refreshCourses()">
-                <i class="fas fa-sync-alt"></i> Refresh
-              </button>
-            </div>
-            <div class="card-body p-0">
-              <div id="teacher-courses-list">
-                <?php if (!empty($teacherCourses ?? [])): ?>
-                  <div class="list-group list-group-flush">
-                    <?php foreach ($teacherCourses as $course): ?>
-                      <div class="list-group-item list-item-custom">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <div class="flex-grow-1">
-                            <h6 class="mb-2 fw-bold" style="color: #1e293b;"><?= esc($course['course_name'] ?? '') ?></h6>
-                            <p class="mb-2 text-muted"><strong>Code:</strong> <?= esc($course['course_code'] ?? '') ?></p>
-                            <p class="mb-2"><?= esc($course['description'] ?? 'No description') ?></p>
-                            <div class="d-flex gap-3 text-muted small">
-                              <span><i class="fas fa-book-open me-1"></i> <?= esc($course['units'] ?? 3) ?> Units</span>
-                              <span><i class="fas fa-user-graduate me-1"></i> <?= esc($course['students'] ?? 0) ?> Students</span>
-                              <span><i class="fas fa-calendar me-1"></i> <?= esc($course['created_at'] ?? 'N/A') ?></span>
-                            </div>
-                          </div>
-                          <span class="badge-custom bg-success"><?= esc($course['status'] ?? 'Active') ?></span>
-                        </div>
-                      </div>
-                    <?php endforeach; ?>
-                  </div>
-                <?php else: ?>
-                  <div class="empty-state">
-                    <i class="fas fa-book"></i>
-                    <p class="mb-1 fw-bold">No courses created yet</p>
-                    <p class="small">Click "Add New Course" to create your first course!</p>
-                  </div>
-                <?php endif; ?>
-              </div>
-            </div>
-          </div>
+          <div class="row" style="display: none;">
+  <div class="col-12">
+    <!-- Action Buttons -->
+    <div class="content-card mb-4">
+      <div class="card-header-custom">
+        <h5><i class="fas fa-cogs"></i> Teacher Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap gap-2">
+          <a href="<?= base_url('teacher/add-course') ?>" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Add New Course
+          </a>
+          <a href="<?= base_url('teacher/manage-courses') ?>" class="btn btn-secondary btn-sm">
+            <i class="fas fa-book"></i> Manage Courses
+          </a>
+          <a href="<?= base_url('teacher/manage-students') ?>" class="btn btn-info btn-sm text-white">
+            <i class="fas fa-users"></i> Manage Students
+          </a>
+          <a href="<?= base_url('admin/course/' . ($teacherCourses[0]['course_id'] ?? '1') . '/upload') ?>" class="btn btn-success btn-sm">
+            <i class="fas fa-upload"></i> Upload Materials
+          </a>
+          <button class="btn btn-outline-primary btn-sm ms-auto" onclick="refreshCourses()">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Courses Table -->
+<div class="content-card">
+  <div class="card-header-custom d-flex justify-content-between align-items-center">
+    <h5><i class="fas fa-graduation-cap"></i> My Courses</h5>
+  </div>
+  <div class="card-body p-0">
+    <?php if (!empty($teacherCourses ?? [])): ?>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle">
+          <thead class="table-primary">
+            <tr>
+              <th>Course Code</th>
+              <th>Course Name</th>
+              <th>Description</th>
+              <th>Units</th>
+              <th>Students</th>
+              <th>Created</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($teacherCourses as $course): ?>
+              <tr>
+                <td><?= esc($course['course_code'] ?? '') ?></td>
+                <td class="fw-bold" style="color:#1e293b;"><?= esc($course['course_name'] ?? '') ?></td>
+                <td><?= esc($course['description'] ?? 'No description available.') ?></td>
+                <td><?= esc($course['units'] ?? 3) ?></td>
+                <td><?= esc($course['students'] ?? 0) ?></td>
+                <td><?= esc(date('M d, Y', strtotime($course['created_at'] ?? 'now'))) ?></td>
+                <td>
+                  <span class="badge bg-success"><?= esc($course['status'] ?? 'Active') ?></span>
+                </td>
+                <td>
+                  <!-- Single "View" button leading to Upload Materials -->
+                  <a href="<?= base_url('admin/course/' . ($course['course_id'] ?? '') . '/upload') ?>"
+                     class="btn btn-sm btn-outline-success"
+                     title="Go to Upload Materials">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php else: ?>
+      <div class="empty-state py-4 text-center text-muted">
+        <i class="fas fa-book fa-2x mb-2"></i>
+        <p class="mb-1 fw-bold">No courses created yet</p>
+        <p class="small">Click “Add New Course” to create your first course!</p>
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
+
+
 
     <?php elseif (($userRole ?? '') === 'student'): ?>
       <!-- Student Dashboard -->
@@ -432,155 +459,184 @@
             </div>
           </div>
 
-          <!-- Quick Actions -->
-          <div class="action-buttons mb-4">
-            <a href="<?= base_url('announcements') ?>" class="btn-action">
-              <i class="fas fa-bullhorn"></i> Announcements
-            </a>
-            <a href="<?= base_url('student/courses') ?>" class="btn-action">
-              <i class="fas fa-graduation-cap"></i> Browse Courses
-            </a>
-            <a href="<?= base_url('student/grades') ?>" class="btn-action">
-              <i class="fas fa-star"></i> View Grades
-            </a>
-          </div>
+         <div class="row">
+  <!-- My Enrolled Courses Table -->
+<div class="col-lg-6 mb-4">
+  <div class="content-card">
+    <div class="card-header-custom">
+      <h5><i class="fas fa-book-reader"></i> My Enrolled Courses</h5>
+    </div>
+    <div class="card-body p-0">
+      <?php if (!empty($enrolledCourses ?? [])): ?>
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0 align-middle" id="enrolledCoursesTable">
+            <thead class="table-primary">
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($enrolledCourses as $course): ?>
+                <tr>
+                  <td><?= esc($course['course_code'] ?? '') ?></td>
+                  <td><?= esc($course['course_name'] ?? '') ?></td>
+                  <td><span class="badge bg-success">Enrolled</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary view-materials-btn"
+                            data-course-id="<?= esc($course['course_id'] ?? '') ?>"
+                            data-course-name="<?= esc($course['course_name'] ?? '') ?>">
+                      <i class="fas fa-eye"></i> View
+                    </button>
+                  </td>
+                </tr>
 
-          <!-- Courses Section -->
-          <div class="row">
-            <!-- Enrolled Courses -->
-            <div class="col-lg-6 mb-4">
-              <div class="content-card">
-                <div class="card-header-custom">
-                  <h5><i class="fas fa-book-reader"></i> My Enrolled Courses</h5>
-                </div>
-                <div class="card-body p-0">
-                  <div id="enrolled-courses-list">
-                    <?php if (!empty($enrolledCourses ?? [])): ?>
-                      <div class="list-group list-group-flush">
-                        <?php foreach ($enrolledCourses as $course): ?>
-                          <div class="list-group-item list-item-custom">
-                            <div class="d-flex justify-content-between align-items-center">
-                              <div>
-                                <h6 class="mb-1 fw-bold" style="color: #1e293b;"><?= esc($course['course_name'] ?? '') ?></h6>
-                                <div class="small text-muted">
-                                  <div><strong>Code:</strong> <?= esc($course['course_code'] ?? '') ?></div>
-                                  <div><strong>Teacher:</strong> <?= esc($course['teacher_name'] ?? 'Unknown') ?></div>
-                                  <div><strong>Units:</strong> <?= esc($course['units'] ?? 3) ?></div>
-                                  <div><strong>Enrolled:</strong> <?= esc($course['enrollment_date'] ?? '') ?></div>
-                                </div>
-                              </div>
-                              <span class="badge-custom bg-success"><?= esc($course['status'] ?? 'Enrolled') ?></span>
-                            </div>
-                          </div>
-                        <?php endforeach; ?>
-                      </div>
-                    <?php else: ?>
-                      <div class="empty-state">
-                        <i class="fas fa-book"></i>
-                        <p class="mb-1 fw-bold">No enrolled courses yet</p>
-                        <p class="small">Browse available courses to get started!</p>
-                      </div>
-                    <?php endif; ?>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <!-- Hidden row for course materials -->
+                <tr class="materials-row" id="materials-<?= esc($course['course_id']) ?>" style="display: none;">
+                  <td colspan="4" class="bg-light">
+                    <div class="p-3 text-center text-muted">
+                      <i class="fas fa-spinner fa-spin"></i> Loading materials...
+                    </div>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php else: ?>
+        <div class="text-center py-4 text-muted">No enrolled courses yet.</div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
 
-            <!-- Available Courses -->
-            <div class="col-lg-6 mb-4">
-              <div class="content-card">
-                <div class="card-header-custom">
-                  <h5><i class="fas fa-plus-circle"></i> Available Courses</h5>
-                </div>
-                <div class="card-body p-0">
-                  <div id="available-courses-list">
-                    <?php if (!empty($availableCourses ?? [])): ?>
-                      <div class="list-group list-group-flush">
-                        <?php foreach ($availableCourses as $course): ?>
-                          <div class="list-group-item list-item-custom">
-                            <div class="d-flex justify-content-between align-items-start">
-                              <div class="flex-grow-1">
-                                <h6 class="mb-1 fw-bold" style="color: #1e293b;"><?= esc($course['course_name'] ?? '') ?></h6>
-                                <div class="small text-muted mb-2">
-                                  <div><strong>Code:</strong> <?= esc($course['course_code'] ?? '') ?></div>
-                                  <div><strong>Teacher:</strong> <?= esc($course['teacher_name'] ?? 'Unknown') ?></div>
-                                  <div><strong>Units:</strong> <?= esc($course['units'] ?? 3) ?></div>
-                                </div>
-                                <p class="small mb-0"><?= esc($course['description'] ?? 'No description available') ?></p>
-                              </div>
-                              <button class="enroll-btn-custom enroll-btn ms-3" 
-                                      data-course-id="<?= esc($course['course_id'] ?? '') ?>"
-                                      data-course-name="<?= esc($course['course_name'] ?? '') ?>">
-                                <i class="fas fa-plus"></i> Enroll
-                              </button>
-                            </div>
-                          </div>
-                        <?php endforeach; ?>
-                      </div>
-                    <?php else: ?>
-                      <div class="empty-state">
-                        <i class="fas fa-graduation-cap"></i>
-                        <p class="mb-1 fw-bold">No available courses</p>
-                        <p class="small">Check back later for new courses!</p>
-                      </div>
-                    <?php endif; ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- Available Courses Table (unchanged) -->
+<div class="col-lg-6 mb-4">
+  <div class="content-card">
+    <div class="card-header-custom">
+      <h5><i class="fas fa-plus-circle"></i> Available Courses</h5>
+    </div>
+    <div class="card-body p-0">
+      <?php if (!empty($availableCourses ?? [])): ?>
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0">
+            <thead class="table-primary">
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($availableCourses as $course): ?>
+                <tr>
+                  <td><?= esc($course['course_code'] ?? '') ?></td>
+                  <td><?= esc($course['course_name'] ?? '') ?></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary enroll-btn"
+                            data-course-id="<?= esc($course['course_id'] ?? '') ?>"
+                            data-course-name="<?= esc($course['course_name'] ?? '') ?>">
+                      <i class="fas fa-plus"></i> Enroll
+                    </button>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php else: ?>
+        <div class="text-center py-4 text-muted">No available courses.</div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
 
-          <!-- Course Materials -->
-          <div class="content-card">
-            <div class="card-header-custom">
-              <h5><i class="fas fa-file-alt"></i> Course Materials</h5>
+
+<script>
+document.querySelectorAll('.view-materials-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const courseId = this.dataset.courseId;
+    const courseName = this.dataset.courseName;
+    const materialsRow = document.getElementById('materials-' + courseId);
+    const materialsCell = materialsRow.querySelector('td');
+
+    // Toggle visibility
+    if (materialsRow.style.display === 'table-row') {
+      materialsRow.style.display = 'none';
+      return;
+    }
+
+    // Hide other rows
+    document.querySelectorAll('.materials-row').forEach(row => row.style.display = 'none');
+
+    // Show loading
+    materialsRow.style.display = 'table-row';
+    materialsCell.innerHTML = `
+      <div class="p-3 text-center text-muted">
+        <i class="fas fa-spinner fa-spin"></i> Loading materials for <strong>${courseName}</strong>...
+      </div>
+    `;
+
+    // ✅ FETCH materials from controller
+    fetch(`<?= base_url('materials/ajax') ?>?course_id=${courseId}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log('Materials response:', data); // for debugging
+
+        if (Array.isArray(data) && data.length > 0) {
+          let html = `
+            <div class="p-3">
+              <h6 class="fw-bold mb-3" style="color:#667eea;">${courseName} Materials</h6>
+              <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                  <thead class="table-primary">
+                    <tr>
+                      <th>File Name</th>
+                      <th>Uploaded Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+          `;
+          data.forEach(material => {
+            html += `
+              <tr>
+                <td><i class="fas fa-file me-2" style="color:#667eea;"></i>${material.file_name}</td>
+                <td>${material.created_at}</td>
+                <td>
+                  <a href="<?= base_url('materials/download/') ?>${material.id}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-download"></i> Download
+                  </a>
+                </td>
+              </tr>
+            `;
+          });
+          html += `</tbody></table></div></div>`;
+          materialsCell.innerHTML = html;
+        } else {
+          materialsCell.innerHTML = `
+            <div class="p-3 text-center text-muted">
+              <i class="fas fa-folder-open fa-2x mb-2"></i>
+              <p class="fw-bold mb-0">No materials uploaded yet for this course.</p>
             </div>
-            <div class="card-body">
-              <?php if (!empty($enrolledCourses ?? [])): ?>
-                <?php foreach ($enrolledCourses as $course): ?>
-                  <div class="mb-4">
-                    <h6 class="fw-bold mb-3" style="color: #667eea;">
-                      <?= esc($course['course_name']) ?> 
-                      <small class="text-muted">(<?= esc($course['course_code']) ?>)</small>
-                    </h6>
-                    <?php 
-                      $materials = model('App\Models\MaterialModel')->getMaterialsByCourse($course['course_id']);
-                    ?>
-                    <?php if (!empty($materials)): ?>
-                      <?php foreach ($materials as $material): ?>
-                        <div class="material-item d-flex justify-content-between align-items-center">
-                          <div>
-                            <div class="d-flex align-items-center mb-1">
-                              <i class="fas fa-file me-2" style="color: #667eea;"></i>
-                              <span class="fw-bold"><?= esc($material['file_name']) ?></span>
-                            </div>
-                            <small class="text-muted">
-                              <i class="fas fa-calendar-alt me-1"></i>
-                              Uploaded: <?= esc(date('M d, Y', strtotime($material['created_at']))) ?>
-                            </small>
-                          </div>
-                          <a href="<?= base_url('materials/download/' . $material['id']) ?>"
-                             class="download-btn"
-                             title="Download Material"
-                             target="_blank">
-                            <i class="fas fa-cloud-download-alt me-1"></i>Download
-                          </a>
-                        </div>
-                      <?php endforeach; ?>
-                    <?php else: ?>
-                      <p class="text-muted small">No materials uploaded for this course yet.</p>
-                    <?php endif; ?>
-                  </div>
-                <?php endforeach; ?>
-              <?php else: ?>
-                <div class="empty-state py-4">
-                  <i class="fas fa-folder-open"></i>
-                  <p class="mb-0 fw-bold">No course materials available</p>
-                  <p class="small">Enroll in courses to access materials</p>
-                </div>
-              <?php endif; ?>
-            </div>
+          `;
+        }
+      })
+      .catch(error => {
+        console.error('Error loading materials:', error);
+        materialsCell.innerHTML = `
+          <div class="p-3 text-center text-danger">
+            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+            <p class="fw-bold mb-0">Failed to load materials.</p>
           </div>
+        `;
+      });
+  });
+});
+</script>
+
 
           <!-- Alert Container -->
           <div id="alert-container" class="mt-3"></div>
