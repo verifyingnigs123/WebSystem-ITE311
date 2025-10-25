@@ -201,9 +201,9 @@ class Auth extends BaseController
             case 'student':
                 return redirect()->to(base_url('announcements'));
             case 'teacher':
-                return redirect()->to(base_url('teacher/dashboard'));
+                return redirect()->to(base_url('dashboard'));
             case 'admin':
-                return redirect()->to(base_url('admin/dashboard'));
+                return redirect()->to(base_url('dashboard'));
             default:
                 return redirect()->to(base_url('dashboard'));
         }
