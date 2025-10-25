@@ -580,7 +580,11 @@ document.querySelectorAll('.view-materials-btn').forEach(button => {
     `;
 
     // ✅ FETCH materials from controller
-    fetch(`<?= base_url('materials/ajax') ?>?course_id=${courseId}`)
+    fetch(`<?= base_url('admin/course/') ?>${courseId}/upload`, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
       .then(res => res.json())
       .then(data => {
         console.log('Materials response:', data); // for debugging
