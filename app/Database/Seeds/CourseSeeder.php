@@ -10,7 +10,7 @@ class CourseSeeder extends Seeder
     {
         // Get teacher user ID
         $teacher = $this->db->table('users')
-            ->where('email', 'teacher@example.com')
+            ->where('email', 'teacher@gmail.com')
             ->get()
             ->getRowArray();
         

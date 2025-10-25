@@ -27,6 +27,18 @@ class UserSeeder extends Seeder
                 'password' => password_hash('student', PASSWORD_DEFAULT),
                 'role'     => 'student',
             ],
+            [
+                'name' => 'Student User',
+                'email'    => 'student1@gmail.com',
+                'password' => password_hash('student', PASSWORD_DEFAULT),
+                'role'     => 'student',
+            ],
+            [
+                'name' => 'Teacher User',
+                'email'    => 'teacher1@gmail.com',
+                'password' => password_hash('teacher', PASSWORD_DEFAULT),
+                'role'     => 'teacher',
+            ],
         ];
 
         // Insert multiple users
