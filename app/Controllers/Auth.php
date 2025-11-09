@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\UserModel; // ✅ Add this line
+use App\Models\NotificationModel; // ✅ Add this too (since you use it later)
+
+
 class Auth extends BaseController
 {
     
@@ -9,6 +13,8 @@ class Auth extends BaseController
     public function register()
     {
         $session = session();
+
+        // If already logged in, redirect based on role
         if ($session->get('isLoggedIn')) {
             return $this->redirectBasedOnRole($session->get('userRole'));
         }
@@ -20,26 +26,32 @@ class Auth extends BaseController
             $password = (string) $this->request->getPost('password');
             $passwordConfirm = (string) $this->request->getPost('password_confirm');
 
+            // Validate required fields
             if ($name === '' || $email === '' || $password === '' || $passwordConfirm === '') {
                 return redirect()->back()->withInput()->with('register_error', 'All fields are required.');
             }
 
+            // Validate email format
             if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return redirect()->back()->withInput()->with('register_error', 'Invalid email address.');
             }
 
+            // Validate password match
             if ($password !== $passwordConfirm) {
                 return redirect()->back()->withInput()->with('register_error', 'Passwords do not match.');
             }
 
-            $userModel = new \App\Models\UserModel();
+            $userModel = new UserModel();
 
+            // Check for duplicate email
             if ($userModel->where('email', $email)->first()) {
                 return redirect()->back()->withInput()->with('register_error', 'Email is already registered.');
             }
 
+            // Hash password
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
+            // Insert student
             $userId = $userModel->insert([
                 'name' => $name,
                 'email' => $email,
@@ -47,19 +59,36 @@ class Auth extends BaseController
                 'password' => $passwordHash,
             ], true);
 
+            // Handle insertion error
             if (! $userId) {
                 return redirect()->back()->withInput()->with('register_error', 'Registration failed.');
             }
 
+           // ✅ Notify Admin
+$notificationModel = new NotificationModel();
+$userModel = new UserModel();
+
+// ✅ Find admin automatically
+$admin = $userModel->where('role', 'admin')->first();
+
+if ($admin) {
+    $notificationModel->insert([
+        'user_id' => $admin['id'],
+        'message' => "A new student has registered: <b>{$name}</b>.",
+        'is_read' => 0,
+        'created_at' => date('Y-m-d H:i:s'),
+    ]);
+}
+
+            // Redirect after success
             return redirect()
                 ->to(base_url('login'))
-                ->with('register_success', 'Account created successfully. Please log in.');
+                ->with('register_success', 'Account created successfully! Please wait for admin approval before logging in.');
         }
 
-        // Display form (GET)
+        // Display registration form
         return view('auth/register');
     }
-
 // Login
     public function login()
     {
