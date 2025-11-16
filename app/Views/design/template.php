@@ -278,12 +278,42 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar-toggle::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .sidebar-toggle:hover::before {
+      width: 120%;
+      height: 120%;
     }
 
     .sidebar-toggle:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-toggle i {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.1rem;
+    }
+
+    .sidebar-wrapper.collapsed .sidebar-toggle i {
+      transform: rotate(180deg);
     }
 
     .sidebar-user {
@@ -1133,12 +1163,21 @@
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const mainBody = document.getElementById('mainBody');
+    const toggleIcon = sidebarToggle.querySelector('i');
+
+    function updateToggleIcon() {
+      const isCollapsed = sidebar.classList.contains('collapsed');
+      toggleIcon.className = isCollapsed ? 'fas fa-chevron-left' : 'fas fa-bars';
+    }
 
     if (sidebarToggle) {
       sidebarToggle.addEventListener('click', function() {
         sidebar.classList.toggle('collapsed');
         mainBody.classList.toggle('sidebar-collapsed');
-        
+
+        // Update icon immediately
+        updateToggleIcon();
+
         // Save state to localStorage
         const isCollapsed = sidebar.classList.contains('collapsed');
         localStorage.setItem('sidebarCollapsed', isCollapsed);
@@ -1150,6 +1189,9 @@
         sidebar.classList.add('collapsed');
         mainBody.classList.add('sidebar-collapsed');
       }
+
+      // Set initial icon state
+      updateToggleIcon();
     }
 
     // Mobile Toggle

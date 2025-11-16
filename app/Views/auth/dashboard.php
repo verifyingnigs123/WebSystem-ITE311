@@ -541,6 +541,308 @@
       padding: 0.4rem 0.85rem;
     }
   }
+
+  /* Professional Course Cards */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .course-card-modern {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.8);
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+
+  .course-card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .course-card-modern:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .course-card-modern:hover::before {
+    transform: scaleX(1);
+  }
+
+  .course-card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 1.5rem 1.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .course-code {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #1e293b;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .course-card-body {
+    padding: 1.5rem;
+  }
+
+  .course-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .view-materials-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: var(--primary-gradient);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  .view-materials-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  }
+
+  .view-materials-btn i {
+    font-size: 1rem;
+  }
+
+  /* Materials Modal */
+  .materials-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1050;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .materials-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .materials-modal-content {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .materials-modal-header {
+    background: var(--primary-gradient);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+  }
+
+  .materials-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .materials-modal-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .materials-modal-close:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+  }
+
+  .materials-modal-body {
+    padding: 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .materials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .material-item-pro {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .material-item-pro:hover {
+    transform: translateX(4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .material-info-pro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .material-icon-pro {
+    width: 48px;
+    height: 48px;
+    background: var(--info-gradient);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .material-details-pro {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .material-name-pro {
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .material-date-pro {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .material-download-btn {
+    background: var(--success-gradient);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    text-decoration: none;
+  }
+
+  .material-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .materials-empty {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #94a3b8;
+  }
+
+  .materials-empty i {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+    display: block;
+  }
+
+  .materials-empty h6 {
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .materials-empty p {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .courses-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .course-card-modern {
+      margin-bottom: 1rem;
+    }
+  }
 </style>
 
 <div class="dashboard-content">
@@ -749,7 +1051,7 @@
         </div>
         <div class="table-responsive">
           <?php if (!empty($enrolledCourses ?? [])): ?>
-            <table class="table-modern" id="enrolledCoursesTable">
+            <table class="table-modern">
               <thead>
                 <tr>
                   <th>Code</th>
@@ -768,16 +1070,8 @@
                       <button class="btn-action-modern primary view-materials-btn"
                               data-course-id="<?= esc($course['course_id'] ?? '') ?>"
                               data-course-name="<?= esc($course['course_name'] ?? '') ?>">
-                        <i class="fas fa-eye"></i> View
+                        <i class="fas fa-eye"></i> View Materials
                       </button>
-                    </td>
-                  </tr>
-                  <!-- Materials Row -->
-                  <tr class="materials-row materials-row-modern" id="materials-<?= esc($course['course_id']) ?>" style="display: none;">
-                    <td colspan="4">
-                      <div class="materials-container text-center text-muted">
-                        <i class="fas fa-spinner fa-spin"></i> Loading materials...
-                      </div>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -850,80 +1144,103 @@
   <?php endif; ?>
 </div>
 
+<!-- Materials Modal -->
+<div class="materials-modal" id="materialsModal">
+  <div class="materials-modal-content">
+    <div class="materials-modal-header">
+      <h5 class="materials-modal-title" id="materialsModalTitle">Course Materials</h5>
+      <button class="materials-modal-close" id="materialsModalClose">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="materials-modal-body" id="materialsModalBody">
+      <!-- Materials will be loaded here -->
+    </div>
+  </div>
+</div>
+
 <script>
+// Materials Modal Functionality
 document.querySelectorAll('.view-materials-btn').forEach(button => {
   button.addEventListener('click', function() {
     const courseId = this.dataset.courseId;
     const courseName = this.dataset.courseName;
-    const materialsRow = document.getElementById('materials-' + courseId);
-    const materialsCell = materialsRow.querySelector('td');
+    const modal = document.getElementById('materialsModal');
+    const modalTitle = document.getElementById('materialsModalTitle');
+    const modalBody = document.getElementById('materialsModalBody');
 
-    if (materialsRow.style.display === 'table-row') {
-      materialsRow.style.display = 'none';
-      return;
-    }
+    // Set modal title
+    modalTitle.textContent = `${courseName} Materials`;
 
-    document.querySelectorAll('.materials-row').forEach(row => row.style.display = 'none');
-    materialsRow.style.display = 'table-row';
-    materialsCell.innerHTML = `
-      <div class="materials-container text-center text-muted">
-        <i class="fas fa-spinner fa-spin"></i> Loading materials for <strong>${courseName}</strong>...
+    // Show modal
+    modal.classList.add('show');
+    modalBody.innerHTML = `
+      <div class="text-center text-muted">
+        <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+        <p>Loading materials...</p>
       </div>
     `;
 
+    // Fetch materials
     fetch(`<?= base_url('admin/course/') ?>${courseId}/upload`, {
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          let html = `
-            <div class="materials-container">
-              <h6 class="fw-bold mb-3" style="color:#667eea;">${courseName} Materials</h6>
-              <div class="materials-list">
-          `;
+          let html = `<div class="materials-list">`;
           data.forEach(material => {
             html += `
-              <div class="material-item-modern">
-                <div class="material-info">
-                  <div class="material-icon">
+              <div class="material-item-pro">
+                <div class="material-info-pro">
+                  <div class="material-icon-pro">
                     <i class="fas fa-file"></i>
                   </div>
-                  <div>
-                    <p class="mb-1 fw-bold" style="color:#1e293b;">${material.file_name}</p>
-                    <p class="mb-0 text-muted small">${material.created_at}</p>
+                  <div class="material-details-pro">
+                    <p class="material-name-pro">${material.file_name}</p>
+                    <p class="material-date-pro">${material.created_at}</p>
                   </div>
                 </div>
-                <a href="<?= base_url('materials/download/') ?>${material.id}" class="btn-action-modern primary">
+                <a href="<?= base_url('materials/download/') ?>${material.id}" class="material-download-btn">
                   <i class="fas fa-download"></i> Download
                 </a>
               </div>
             `;
           });
-          html += `</div></div>`;
-          materialsCell.innerHTML = html;
+          html += `</div>`;
+          modalBody.innerHTML = html;
         } else {
-          materialsCell.innerHTML = `
-            <div class="materials-container">
-              <div class="empty-state-modern">
-                <i class="fas fa-folder-open"></i>
-                <h6>No Materials Yet</h6>
-                <p>No materials have been uploaded for this course.</p>
-              </div>
+          modalBody.innerHTML = `
+            <div class="materials-empty">
+              <i class="fas fa-folder-open"></i>
+              <h6>No Materials Yet</h6>
+              <p>No materials have been uploaded for this course.</p>
             </div>
           `;
         }
       })
       .catch(error => {
         console.error('Error loading materials:', error);
-        materialsCell.innerHTML = `
-          <div class="materials-container text-center text-danger">
+        modalBody.innerHTML = `
+          <div class="text-center text-danger">
             <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
             <p class="fw-bold mb-0">Failed to load materials.</p>
           </div>
         `;
       });
   });
+});
+
+// Close modal functionality
+document.getElementById('materialsModalClose').addEventListener('click', function() {
+  document.getElementById('materialsModal').classList.remove('show');
+});
+
+// Close modal when clicking outside
+document.getElementById('materialsModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    this.classList.remove('show');
+  }
 });
 </script>
 
