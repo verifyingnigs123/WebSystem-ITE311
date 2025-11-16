@@ -5,554 +5,850 @@
 <?= $this->section('content') ?>
 
 <style>
-  /* Modern Dashboard Styling */
-  .dashboard-container {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 2rem 0;
+  /* Modern Professional Dashboard Styling - Optimized for Sidebar */
+  :root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --info-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
-  
-  .welcome-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Dashboard Container - Adjusted for Sidebar */
+  .dashboard-content {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e2e8f5 100%);
+    min-height: calc(100vh - 80px);
+    padding: 2rem;
+  }
+
+  /* Welcome Card */
+  .welcome-card {
+    background: var(--primary-gradient);
     border-radius: 20px;
-    padding: 3rem;
+    padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
     position: relative;
     overflow: hidden;
   }
-  
-  .welcome-section::before {
+
+  .welcome-card::before {
     content: '';
     position: absolute;
     top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: pulse 15s ease-in-out infinite;
+    right: -20%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    animation: pulseWave 15s ease-in-out infinite;
   }
-  
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
+
+  @keyframes pulseWave {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+    50% { transform: scale(1.1) rotate(90deg); opacity: 0.8; }
   }
-  
+
   .welcome-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
   }
-  
-  .welcome-section h2 {
+
+  .welcome-text h2 {
     color: #fff;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 1.75rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
-  
-  .welcome-section p {
+
+  .welcome-text p {
     color: rgba(255,255,255,0.95);
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+    margin: 0;
   }
-  
-  .stats-card {
+
+  .welcome-avatar {
+    width: 70px;
+    height: 70px;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #fff;
+    font-weight: 700;
+    border: 3px solid rgba(255,255,255,0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 1.5rem;
-    height: 100%;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(102, 126, 234, 0.1);
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
   }
-  
-  .stats-card::before {
+
+  .stat-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    height: 3px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
   }
-  
-  .stats-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+
+  .stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-shadow-hover);
   }
-  
-  .stats-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
+
+  .stat-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .stat-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-size: 1.4rem;
+    background: var(--primary-gradient);
     color: #fff;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 6px 14px rgba(102, 126, 234, 0.35);
   }
-  
-  .stats-card h5 {
+
+  .stat-icon-wrapper.success {
+    background: var(--success-gradient);
+    box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
+  }
+
+  .stat-icon-wrapper.warning {
+    background: var(--warning-gradient);
+    box-shadow: 0 6px 14px rgba(245, 158, 11, 0.35);
+  }
+
+  .stat-icon-wrapper.info {
+    background: var(--info-gradient);
+    box-shadow: 0 6px 14px rgba(59, 130, 246, 0.35);
+  }
+
+  .stat-body h3 {
+    color: #1e293b;
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    line-height: 1;
+  }
+
+  .stat-body p {
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-  }
-  
-  .stats-card h2 {
-    color: #1e293b;
-    font-size: 2.5rem;
-    font-weight: 700;
     margin: 0;
   }
-  
-  .content-card {
+
+  /* Content Cards */
+  .content-card-modern {
     background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
     overflow: hidden;
     margin-bottom: 2rem;
-    border: 1px solid rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
   }
-  
-  .card-header-custom {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    padding: 1.5rem;
+
+  .content-card-modern:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .card-header-modern {
+    background: var(--primary-gradient);
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: none;
   }
-  
-  .card-header-custom h5 {
+
+  .card-header-modern h5 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.15rem;
     margin: 0;
-    font-weight: 600;
-    font-size: 1.2rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
-  
-  .action-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-  
-  .btn-action {
-    background: #fff;
-    color: #667eea;
-    border: 2px solid #667eea;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-  }
-  
-  .btn-action:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
-  }
-  
-  .btn-action i {
-    margin-right: 0.5rem;
-  }
-  
-  .list-item-custom {
-    padding: 1.25rem;
-    border: none;
-    border-bottom: 1px solid #f1f5f9;
-    transition: all 0.3s ease;
-  }
-  
-  .list-item-custom:hover {
-    background: #f8fafc;
-    transform: translateX(5px);
-  }
-  
-  .list-item-custom:last-child {
-    border-bottom: none;
-  }
-  
-  .badge-custom {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.75rem;
-  }
-  
-  .empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: #94a3b8;
-  }
-  
-  .empty-state i {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-  }
-  
-  .refresh-btn {
+
+  .card-header-modern .btn-modern {
     background: rgba(255,255,255,0.2);
     border: 1px solid rgba(255,255,255,0.3);
     color: #fff;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-  }
-  
-  .refresh-btn:hover {
-    background: rgba(255,255,255,0.3);
-    color: #fff;
-  }
-  
-  .enroll-btn-custom {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
+    font-size: 0.85rem;
     transition: all 0.3s ease;
+    cursor: pointer;
   }
-  
-  .enroll-btn-custom:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+
+  .card-header-modern .btn-modern:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.05);
   }
-  
-  .material-item {
+
+  /* Modern Table Styling */
+  .table-modern {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table-modern thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
+
+  .table-modern thead th {
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #475569;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+  }
+
+  .table-modern tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .table-modern tbody tr:hover {
     background: #f8fafc;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    transition: all 0.3s ease;
   }
-  
-  .material-item:hover {
-    background: #f1f5f9;
-    transform: translateX(5px);
+
+  .table-modern tbody td {
+    padding: 1.1rem 1.25rem;
+    color: #334155;
+    vertical-align: middle;
+    font-size: 0.9rem;
   }
-  
-  .download-btn {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: #fff;
-    border: none;
+
+  /* Action Buttons */
+  .btn-action-modern {
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
   }
-  
-  .download-btn:hover {
+
+  .btn-action-modern.primary {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+  }
+
+  .btn-action-modern.primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-action-modern.success {
+    background: var(--success-gradient);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-action-modern.success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  }
+
+  .btn-action-modern.outline {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+  }
+
+  .btn-action-modern.outline:hover {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  /* Badge Styling */
+  .badge-modern {
+    padding: 0.4rem 0.85rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-modern.success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+  }
+
+  .badge-modern.primary {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1e40af;
+  }
+
+  /* Empty State */
+  .empty-state-modern {
+    text-align: center;
+    padding: 3.5rem 2rem;
+    color: #94a3b8;
+  }
+
+  .empty-state-modern i {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+    opacity: 0.3;
+    display: block;
+  }
+
+  .empty-state-modern h6 {
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .empty-state-modern p {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  /* Admin Center */
+  .admin-center {
+    text-align: center;
+    padding: 3.5rem 2rem;
+  }
+
+  .admin-icon-lg {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 1.75rem;
+    background: var(--primary-gradient);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.25rem;
+    color: #fff;
+    box-shadow: 0 16px 36px rgba(102, 126, 234, 0.4);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .admin-center h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.875rem;
+  }
+
+  .admin-center .lead {
+    color: #64748b;
+    font-size: 1.05rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .alert-modern {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: none;
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+    color: #065f46;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+  }
+
+  /* Responsive Grid Layout */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 1.75rem;
+  }
+
+  /* Material Row Styles */
+  .materials-row-modern {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
+
+  .materials-container {
+    padding: 1.75rem;
+  }
+
+  .materials-container h6 {
+    font-size: 1.05rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .material-item-modern {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.15rem;
+    margin-bottom: 0.875rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .material-item-modern:hover {
+    transform: translateX(6px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .material-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .material-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--info-gradient);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+
+  .material-info > div {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .material-info p {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .dashboard-content {
+      padding: 1.5rem;
+    }
+
+    .welcome-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .welcome-text h2 {
+      font-size: 1.5rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-content {
+      padding: 1rem;
+    }
+
+    .welcome-card {
+      padding: 1.5rem;
+    }
+
+    .table-modern {
+      font-size: 0.85rem;
+    }
+
+    .table-modern thead th,
+    .table-modern tbody td {
+      padding: 0.75rem 0.875rem;
+    }
+
+    .btn-action-modern {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+    }
   }
 </style>
 
-<div class="dashboard-container">
-  <div class="container py-4">
-    <!-- Welcome Message -->
-    <div class="welcome-section">
-      <div class="welcome-content text-center">
-        <h2 class="fw-bold">
-          Welcome back, <?= esc($userName ?? 'User') ?>! 👋
-        </h2>
-        <p class="mb-1">
-          <strong><?= esc($userRole ?? 'Guest') ?></strong> Dashboard
-        </p>
-        <p>
-          <?= esc($userEmail ?? 'N/A') ?>
-        </p>
+<div class="dashboard-content">
+  <!-- Welcome Card -->
+  <div class="welcome-card">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <h2>Welcome back, <?= esc($userName ?? 'User') ?>! 👋</h2>
+        <p><strong><?= ucfirst($userRole ?? 'Guest') ?></strong> • <?= esc($userEmail ?? 'N/A') ?></p>
       </div>
-    </div>
-
-    <!-- Role-based Conditional Content -->
-    <?php if (($userRole ?? '') === 'admin'): ?>
-      <!-- Admin Dashboard -->
-      <div class="content-card">
-        <div class="card-body text-center py-5">
-          <div class="stats-icon mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
-            <i class="fas fa-user-shield"></i>
-          </div>
-          <h1 class="display-5 mb-3" style="color: #667eea;">Admin Control Center</h1>
-          <p class="lead text-muted mb-4">Manage your platform with ease</p>
-          <div class="alert alert-success border-0" role="alert" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
-            <i class="fas fa-check-circle me-2"></i>
-            All systems operational. Ready to manage users and content.
-          </div>
-          <div class="action-buttons justify-content-center mt-4">
-            <a href="<?= base_url('announcements') ?>" class="btn-action">
-              <i class="fas fa-bullhorn"></i> Announcements
-            </a>
-            <a href="<?= base_url('logout') ?>" class="btn-action" style="border-color: #ef4444; color: #ef4444;">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-          </div>
-        </div>
-      </div>
-
-    <?php elseif (($userRole ?? '') === 'teacher'): ?>
-
-          <!-- Stats Cards -->
-          <div class="row mb-4">
-            <div class="col-md-6 mb-3">
-              <div class="stats-card">
-                <div class="stats-icon">
-                  <i class="fas fa-book"></i>
-                </div>
-                <h5>My Courses</h5>
-                <h2><?= count($teacherCourses ?? []) ?></h2>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="stats-card">
-                <div class="stats-icon">
-                  <i class="fas fa-users"></i>
-                </div>
-                <h5>Total Students</h5>
-                <h2><?= array_sum(array_column($teacherCourses ?? [], 'students')) ?></h2>
-              </div>
-            </div>
-          </div>
-
-          <div class="row" style="display: none;">
-  <div class="col-12">
-    <!-- Action Buttons -->
-    <div class="content-card mb-4">
-      <div class="card-header-custom">
-        <h5><i class="fas fa-cogs"></i> Teacher Actions</h5>
-      </div>
-      <div class="card-body">
-        <div class="d-flex flex-wrap gap-2">
-          <a href="<?= base_url('teacher/add-course') ?>" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Add New Course
-          </a>
-          <a href="<?= base_url('teacher/manage-courses') ?>" class="btn btn-secondary btn-sm">
-            <i class="fas fa-book"></i> Manage Courses
-          </a>
-          <a href="<?= base_url('teacher/manage-students') ?>" class="btn btn-info btn-sm text-white">
-            <i class="fas fa-users"></i> Manage Students
-          </a>
-          <a href="<?= base_url('admin/course/' . ($teacherCourses[0]['course_id'] ?? '1') . '/upload') ?>" class="btn btn-success btn-sm">
-            <i class="fas fa-upload"></i> Upload Materials
-          </a>
-          <button class="btn btn-outline-primary btn-sm ms-auto" onclick="refreshCourses()">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
-        </div>
+      <div class="welcome-avatar">
+        <?= strtoupper(substr($userName ?? 'U', 0, 1)) ?>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Courses Table -->
-<div class="content-card">
-  <div class="card-header-custom d-flex justify-content-between align-items-center">
-    <h5><i class="fas fa-graduation-cap"></i> My Courses</h5>
-  </div>
-  <div class="card-body p-0">
-    <?php if (!empty($teacherCourses ?? [])): ?>
+  <!-- Role-based Content -->
+  <?php if (($userRole ?? '') === 'admin'): ?>
+    <!-- Admin Dashboard -->
+    <div class="content-card-modern">
+      <div class="admin-center">
+        <div class="admin-icon-lg">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h1>Admin Control Center</h1>
+        <p class="lead">Manage your platform with powerful administrative tools</p>
+        <div class="alert-modern">
+          <i class="fas fa-check-circle"></i>
+          All systems operational. Ready to manage users and content.
+        </div>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href="<?= base_url('announcements') ?>" class="btn-action-modern primary">
+            <i class="fas fa-bullhorn"></i> Manage Announcements
+          </a>
+          <a href="<?= base_url('manage-users') ?>" class="btn-action-modern outline">
+            <i class="fas fa-users-cog"></i> Manage Users
+          </a>
+        </div>
+      </div>
+    </div>
+
+  <?php elseif (($userRole ?? '') === 'teacher'): ?>
+    <!-- Teacher Dashboard -->
+    
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-book"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3><?= count($teacherCourses ?? []) ?></h3>
+          <p>My Courses</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper success">
+            <i class="fas fa-users"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3><?= array_sum(array_column($teacherCourses ?? [], 'students')) ?></h3>
+          <p>Total Students</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper info">
+            <i class="fas fa-file-alt"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3><?= $totalMaterials ?? 0 ?></h3>
+          <p>Materials Uploaded</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher Alert Container -->
+    <div id="teacher-alert-container"></div>
+
+    <!-- My Courses Table -->
+    <div class="content-card-modern">
+      <div class="card-header-modern">
+        <h5>
+          <i class="fas fa-graduation-cap"></i>
+          My Courses
+        </h5>
+        <button class="btn-modern" onclick="refreshCourses()">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+      </div>
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0 align-middle">
-          <thead class="table-primary">
-            <tr>
-              <th>Course Code</th>
-              <th>Course Name</th>
-              <th>Description</th>
-              <th>Units</th>
-              <th>Students</th>
-              <th>Created</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($teacherCourses as $course): ?>
+        <?php if (!empty($teacherCourses ?? [])): ?>
+          <table class="table-modern">
+            <thead>
               <tr>
-                <td><?= esc($course['course_code'] ?? '') ?></td>
-                <td class="fw-bold" style="color:#1e293b;"><?= esc($course['course_name'] ?? '') ?></td>
-                <td><?= esc($course['description'] ?? 'No description available.') ?></td>
-                <td><?= esc($course['units'] ?? 3) ?></td>
-                <td><?= esc($course['students'] ?? 0) ?></td>
-                <td><?= esc(date('M d, Y', strtotime($course['created_at'] ?? 'now'))) ?></td>
-                <td>
-                  <span class="badge bg-success"><?= esc($course['status'] ?? 'Active') ?></span>
-                </td>
-                <td>
-                  <!-- Single "View" button leading to Upload Materials -->
-                  <a href="<?= base_url('admin/course/' . ($course['course_id'] ?? '') . '/upload') ?>"
-                     class="btn btn-sm btn-outline-success"
-                     title="Go to Upload Materials">
-                    <i class="fas fa-eye"></i> View
-                  </a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    <?php else: ?>
-      <div class="empty-state py-4 text-center text-muted">
-        <i class="fas fa-book fa-2x mb-2"></i>
-        <p class="mb-1 fw-bold">No courses created yet</p>
-        <p class="small">Click “Add New Course” to create your first course!</p>
-      </div>
-    <?php endif; ?>
-  </div>
-</div>
-
-
-
-    <?php elseif (($userRole ?? '') === 'student'): ?>
-      <!-- Student Dashboard -->
-      <div class="row">
-        <div class="col-12">
-          <!-- Stats Cards -->
-          <div class="row mb-4">
-            <div class="col-md-4 mb-3">
-              <div class="stats-card">
-                <div class="stats-icon">
-                  <i class="fas fa-graduation-cap"></i>
-                </div>
-                <h5>Enrolled Courses</h5>
-                <h2><?= count($enrolledCourses ?? []) ?></h2>
-              </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="stats-card">
-                <div class="stats-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                  <i class="fas fa-clipboard-list"></i>
-                </div>
-                <h5>Pending Assignments</h5>
-                <h2><?= count($upcomingDeadlines ?? []) ?></h2>
-              </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="stats-card">
-                <div class="stats-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                  <i class="fas fa-star"></i>
-                </div>
-                <h5>Average Grade</h5>
-                <h2>
-                  <?php 
-                  if (!empty($recentGrades ?? [])) {
-                    $avg = array_sum(array_column($recentGrades, 'grade')) / count($recentGrades);
-                    echo number_format($avg, 1);
-                  } else {
-                    echo 'N/A';
-                  }
-                  ?>
-                </h2>
-              </div>
-            </div>
-          </div>
-
-         <div class="row">
-  <!-- My Enrolled Courses Table -->
-<div class="col-lg-6 mb-4">
-  <div class="content-card">
-    <div class="card-header-custom">
-      <h5><i class="fas fa-book-reader"></i> My Enrolled Courses</h5>
-    </div>
-    <div class="card-body p-0">
-      <?php if (!empty($enrolledCourses ?? [])): ?>
-        <div class="table-responsive">
-          <table class="table table-hover table-striped mb-0 align-middle" id="enrolledCoursesTable">
-            <thead class="table-primary">
-              <tr>
-                <th>Course Code</th>
+                <th>Code</th>
                 <th>Course Name</th>
+                <th>Description</th>
+                <th>Units</th>
+                <th>Students</th>
+                <th>Created</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($enrolledCourses as $course): ?>
+              <?php foreach ($teacherCourses as $course): ?>
                 <tr>
-                  <td><?= esc($course['course_code'] ?? '') ?></td>
+                  <td><strong><?= esc($course['course_code'] ?? '') ?></strong></td>
                   <td><?= esc($course['course_name'] ?? '') ?></td>
-                  <td><span class="badge bg-success">Enrolled</span></td>
+                  <td><?= esc(substr($course['description'] ?? 'No description', 0, 50)) ?>...</td>
+                  <td><?= esc($course['units'] ?? 3) ?></td>
+                  <td><?= esc($course['students'] ?? 0) ?></td>
+                  <td><?= esc(date('M d, Y', strtotime($course['created_at'] ?? 'now'))) ?></td>
+                  <td><span class="badge-modern success"><?= esc($course['status'] ?? 'Active') ?></span></td>
                   <td>
-                    <button class="btn btn-sm btn-outline-primary view-materials-btn"
-                            data-course-id="<?= esc($course['course_id'] ?? '') ?>"
-                            data-course-name="<?= esc($course['course_name'] ?? '') ?>">
+                    <a href="<?= base_url('admin/course/' . ($course['course_id'] ?? '') . '/upload') ?>"
+                       class="btn-action-modern primary">
                       <i class="fas fa-eye"></i> View
-                    </button>
-                  </td>
-                </tr>
-
-                <!-- Hidden row for course materials -->
-                <tr class="materials-row" id="materials-<?= esc($course['course_id']) ?>" style="display: none;">
-                  <td colspan="4" class="bg-light">
-                    <div class="p-3 text-center text-muted">
-                      <i class="fas fa-spinner fa-spin"></i> Loading materials...
-                    </div>
+                    </a>
                   </td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
           </table>
-        </div>
-      <?php else: ?>
-        <div class="text-center py-4 text-muted">No enrolled courses yet.</div>
-      <?php endif; ?>
+        <?php else: ?>
+          <div class="empty-state-modern">
+            <i class="fas fa-book"></i>
+            <h6>No Courses Yet</h6>
+            <p>Start by creating your first course!</p>
+          </div>
+        <?php endif; ?>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Available Courses Table (unchanged) -->
-<div class="col-lg-6 mb-4">
-  <div class="content-card">
-    <div class="card-header-custom">
-      <h5><i class="fas fa-plus-circle"></i> Available Courses</h5>
+  <?php elseif (($userRole ?? '') === 'student'): ?>
+    <!-- Student Dashboard -->
+    
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3><?= count($enrolledCourses ?? []) ?></h3>
+          <p>Enrolled Courses</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper warning">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3><?= count($upcomingDeadlines ?? []) ?></h3>
+          <p>Pending Tasks</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon-wrapper success">
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        <div class="stat-body">
+          <h3>
+            <?php 
+            if (!empty($recentGrades ?? [])) {
+              $avg = array_sum(array_column($recentGrades, 'grade')) / count($recentGrades);
+              echo number_format($avg, 1);
+            } else {
+              echo 'N/A';
+            }
+            ?>
+          </h3>
+          <p>Average Grade</p>
+        </div>
+      </div>
     </div>
-    <div class="card-body p-0">
-      <?php if (!empty($availableCourses ?? [])): ?>
+
+    <!-- Alert Container -->
+    <div id="alert-container"></div>
+
+    <!-- Courses Grid -->
+    <div class="dashboard-grid">
+      <!-- Enrolled Courses -->
+      <div class="content-card-modern">
+        <div class="card-header-modern">
+          <h5>
+            <i class="fas fa-book-reader"></i>
+            My Enrolled Courses
+          </h5>
+        </div>
         <div class="table-responsive">
-          <table class="table table-hover table-striped mb-0">
-            <thead class="table-primary">
-              <tr>
-                <th>Course Code</th>
-                <th>Course Name</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($availableCourses as $course): ?>
+          <?php if (!empty($enrolledCourses ?? [])): ?>
+            <table class="table-modern" id="enrolledCoursesTable">
+              <thead>
                 <tr>
-                  <td><?= esc($course['course_code'] ?? '') ?></td>
-                  <td><?= esc($course['course_name'] ?? '') ?></td>
-                  <td>
-                    <button class="btn btn-sm btn-primary enroll-btn"
-                            data-course-id="<?= esc($course['course_id'] ?? '') ?>"
-                            data-course-name="<?= esc($course['course_name'] ?? '') ?>">
-                      <i class="fas fa-plus"></i> Enroll
-                    </button>
-                  </td>
+                  <th>Code</th>
+                  <th>Course Name</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php foreach ($enrolledCourses as $course): ?>
+                  <tr>
+                    <td><strong><?= esc($course['course_code'] ?? '') ?></strong></td>
+                    <td><?= esc($course['course_name'] ?? '') ?></td>
+                    <td><span class="badge-modern success">Enrolled</span></td>
+                    <td>
+                      <button class="btn-action-modern primary view-materials-btn"
+                              data-course-id="<?= esc($course['course_id'] ?? '') ?>"
+                              data-course-name="<?= esc($course['course_name'] ?? '') ?>">
+                        <i class="fas fa-eye"></i> View
+                      </button>
+                    </td>
+                  </tr>
+                  <!-- Materials Row -->
+                  <tr class="materials-row materials-row-modern" id="materials-<?= esc($course['course_id']) ?>" style="display: none;">
+                    <td colspan="4">
+                      <div class="materials-container text-center text-muted">
+                        <i class="fas fa-spinner fa-spin"></i> Loading materials...
+                      </div>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          <?php else: ?>
+            <div class="empty-state-modern">
+              <i class="fas fa-book-reader"></i>
+              <h6>No Enrolled Courses</h6>
+              <p>Browse available courses to get started!</p>
+            </div>
+          <?php endif; ?>
         </div>
-      <?php else: ?>
-        <div class="text-center py-4 text-muted">No available courses.</div>
-      <?php endif; ?>
-    </div>
-  </div>
-</div>
+      </div>
 
+      <!-- Available Courses -->
+      <div class="content-card-modern">
+        <div class="card-header-modern">
+          <h5>
+            <i class="fas fa-plus-circle"></i>
+            Available Courses
+          </h5>
+        </div>
+        <div class="table-responsive">
+          <?php if (!empty($availableCourses ?? [])): ?>
+            <table class="table-modern">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Course Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($availableCourses as $course): ?>
+                  <tr>
+                    <td><strong><?= esc($course['course_code'] ?? '') ?></strong></td>
+                    <td><?= esc($course['course_name'] ?? '') ?></td>
+                    <td>
+                      <button class="btn-action-modern success enroll-btn"
+                              data-course-id="<?= esc($course['course_id'] ?? '') ?>"
+                              data-course-name="<?= esc($course['course_name'] ?? '') ?>">
+                        <i class="fas fa-plus"></i> Enroll
+                      </button>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          <?php else: ?>
+            <div class="empty-state-modern">
+              <i class="fas fa-check-circle"></i>
+              <h6>All Courses Enrolled</h6>
+              <p>You're enrolled in all available courses!</p>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+
+  <?php else: ?>
+    <!-- Unknown Role -->
+    <div class="content-card-modern">
+      <div class="empty-state-modern">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h6>Role Not Recognized</h6>
+        <p>Please contact the administrator to resolve this issue.</p>
+      </div>
+    </div>
+  <?php endif; ?>
+</div>
 
 <script>
 document.querySelectorAll('.view-materials-btn').forEach(button => {
@@ -562,68 +858,58 @@ document.querySelectorAll('.view-materials-btn').forEach(button => {
     const materialsRow = document.getElementById('materials-' + courseId);
     const materialsCell = materialsRow.querySelector('td');
 
-    // Toggle visibility
     if (materialsRow.style.display === 'table-row') {
       materialsRow.style.display = 'none';
       return;
     }
 
-    // Hide other rows
     document.querySelectorAll('.materials-row').forEach(row => row.style.display = 'none');
-
-    // Show loading
     materialsRow.style.display = 'table-row';
     materialsCell.innerHTML = `
-      <div class="p-3 text-center text-muted">
+      <div class="materials-container text-center text-muted">
         <i class="fas fa-spinner fa-spin"></i> Loading materials for <strong>${courseName}</strong>...
       </div>
     `;
 
-    // ✅ FETCH materials from controller
     fetch(`<?= base_url('admin/course/') ?>${courseId}/upload`, {
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
       .then(res => res.json())
       .then(data => {
-        console.log('Materials response:', data); // for debugging
-
         if (Array.isArray(data) && data.length > 0) {
           let html = `
-            <div class="p-3">
+            <div class="materials-container">
               <h6 class="fw-bold mb-3" style="color:#667eea;">${courseName} Materials</h6>
-              <div class="table-responsive">
-                <table class="table table-bordered mb-0">
-                  <thead class="table-primary">
-                    <tr>
-                      <th>File Name</th>
-                      <th>Uploaded Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+              <div class="materials-list">
           `;
           data.forEach(material => {
             html += `
-              <tr>
-                <td><i class="fas fa-file me-2" style="color:#667eea;"></i>${material.file_name}</td>
-                <td>${material.created_at}</td>
-                <td>
-                  <a href="<?= base_url('materials/download/') ?>${material.id}" class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-download"></i> Download
-                  </a>
-                </td>
-              </tr>
+              <div class="material-item-modern">
+                <div class="material-info">
+                  <div class="material-icon">
+                    <i class="fas fa-file"></i>
+                  </div>
+                  <div>
+                    <p class="mb-1 fw-bold" style="color:#1e293b;">${material.file_name}</p>
+                    <p class="mb-0 text-muted small">${material.created_at}</p>
+                  </div>
+                </div>
+                <a href="<?= base_url('materials/download/') ?>${material.id}" class="btn-action-modern primary">
+                  <i class="fas fa-download"></i> Download
+                </a>
+              </div>
             `;
           });
-          html += `</tbody></table></div></div>`;
+          html += `</div></div>`;
           materialsCell.innerHTML = html;
         } else {
           materialsCell.innerHTML = `
-            <div class="p-3 text-center text-muted">
-              <i class="fas fa-folder-open fa-2x mb-2"></i>
-              <p class="fw-bold mb-0">No materials uploaded yet for this course.</p>
+            <div class="materials-container">
+              <div class="empty-state-modern">
+                <i class="fas fa-folder-open"></i>
+                <h6>No Materials Yet</h6>
+                <p>No materials have been uploaded for this course.</p>
+              </div>
             </div>
           `;
         }
@@ -631,7 +917,7 @@ document.querySelectorAll('.view-materials-btn').forEach(button => {
       .catch(error => {
         console.error('Error loading materials:', error);
         materialsCell.innerHTML = `
-          <div class="p-3 text-center text-danger">
+          <div class="materials-container text-center text-danger">
             <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
             <p class="fw-bold mb-0">Failed to load materials.</p>
           </div>
@@ -641,67 +927,10 @@ document.querySelectorAll('.view-materials-btn').forEach(button => {
 });
 </script>
 
-
-          <!-- Alert Container -->
-          <div id="alert-container" class="mt-3"></div>
-          <div id="teacher-alert-container" class="mt-3"></div>
-        </div>
-      </div>
-
-    <?php else: ?>
-      <!-- Unknown Role -->
-      <div class="content-card">
-        <div class="card-body text-center py-5">
-          <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #f59e0b; margin-bottom: 1rem;"></i>
-          <h4 style="color: #1e293b;">Role Not Recognized</h4>
-          <p class="text-muted">Please contact the administrator to resolve this issue.</p>
-        </div>
-      </div>
-    <?php endif; ?>
-  </div>
-</div>
-
-<!-- Add Course Modal (keeping original functionality) -->
-<div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" style="border-radius: 16px; border: none;">
-      <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 16px 16px 0 0;">
-        <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="<?= base_url('course/create') ?>" method="post" id="addCourseForm">
-        <?= csrf_field() ?>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="course_code" class="form-label fw-bold">Course Code *</label>
-            <input type="text" class="form-control" id="course_code" name="course_code" required style="border-radius: 8px;">
-            <div class="form-text">e.g., CS101, MATH201</div>
-          </div>
-          <div class="mb-3">
-            <label for="course_name" class="form-label fw-bold">Course Name *</label>
-            <input type="text" class="form-control" id="course_name" name="course_name" required style="border-radius: 8px;">
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label fw-bold">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3" style="border-radius: 8px;"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="units" class="form-label fw-bold">Units</label>
-            <input type="number" class="form-control" id="units" name="units" min="1" max="6" value="3" style="border-radius: 8px;">
-          </div>
-        </div>
-        <div class="modal-footer" style="border-top: 1px solid #f1f5f9;">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="saveCourseBtn" style="border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">Create Course</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
     // Handle enrollment button clicks
@@ -712,16 +941,7 @@ $(document).ready(function() {
         var courseId = button.data('course-id');
         var courseName = button.data('course-name');
         
-        console.log('Enrollment button clicked:', {
-            courseId: courseId,
-            courseName: courseName,
-            button: button
-        });
-        
         button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enrolling...');
-        
-        console.log('Sending AJAX request to:', '<?= base_url('course/enroll') ?>');
-        console.log('POST data:', { course_id: courseId });
         
         $.ajax({
             url: '<?= base_url('course/enroll') ?>',
@@ -734,233 +954,39 @@ $(document).ready(function() {
             timeout: 10000
         })
         .done(function(response) {
-            console.log('AJAX response received:', response);
             if (response && response.success) {
                 showAlert('success', response.message);
-                button.closest('.list-group-item').fadeOut(300, function() { $(this).remove(); });
-                addToEnrolledCourses(courseId, courseName);
-                updateEnrolledCount();
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
             } else {
                 showAlert('danger', (response && response.message) ? response.message : 'Failed to enroll in course.');
                 button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
             }
         })
         .fail(function(xhr, status, error) {
-            console.error('Enrollment failed:', xhr.responseText, status, error);
             let errorMessage = 'An error occurred. Please try again.';
             if (status === 'timeout') errorMessage = 'Request timed out. Please try again.';
             else if (xhr.status === 0) errorMessage = 'Network error. Please check your connection.';
-            else {
-                try {
-                    const errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) errorMessage = errorResponse.message;
-                } catch (e) {}
-            }
             showAlert('danger', errorMessage);
             button.prop('disabled', false).html('<i class="fas fa-plus"></i> Enroll');
         });
     });
     
     function showAlert(type, message) {
-        var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert" style="border-radius: 12px; border: none;">' +
-            '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle') + ' me-2"></i>' +
-            message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-            '</div>';
+        var alertHtml = `
+          <div class="alert alert-${type} alert-dismissible fade show" role="alert" style="border-radius: 16px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        `;
         $('#alert-container').html(alertHtml);
         setTimeout(function() { $('.alert').fadeOut(); }, 5000);
     }
-    
-    function addToEnrolledCourses(courseId, courseName) {
-        var enrolledList = $('#enrolled-courses-list .list-group');
-        if (enrolledList.find('.list-group-item').length === 0) {
-            enrolledList.html('');
-            $('#enrolled-courses-list .empty-state').remove();
-        }
-        var courseHtml = '<div class="list-group-item list-item-custom">' +
-            '<div class="d-flex justify-content-between align-items-center">' +
-            '<div>' +
-            '<h6 class="mb-1 fw-bold" style="color: #1e293b;">' + courseName + '</h6>' +
-            '<div class="small text-muted">' +
-            '<div><strong>Enrolled:</strong> ' + new Date().toLocaleDateString() + '</div>' +
-            '</div>' +
-            '</div>' +
-            '<span class="badge-custom bg-success">Enrolled</span>' +
-            '</div>' +
-            '</div>';
-        enrolledList.prepend(courseHtml);
-    }
-    
-    function updateEnrolledCount() {
-        var count = $('#enrolled-courses-list .list-group-item').length;
-        $('.stats-card:first h2').text(count);
-    }
-});
-</script>
-<script>
-$(document).ready(function() {
-    // Handle course creation form submission
-    $('#addCourseForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        var formData = {
-            course_code: $('#course_code').val(),
-            course_name: $('#course_name').val(),
-            description: $('#description').val(),
-            units: $('#units').val()
-        };
-        
-        var submitBtn = $('#saveCourseBtn');
-        var originalText = submitBtn.html();
-        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
-        
-        $.ajax({
-            url: '<?= base_url('course/create') ?>',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            timeout: 10000,
-            beforeSend: function(xhr) {
-                var csrfToken = $('input[name="<?= csrf_token() ?>"]').val();
-                if (csrfToken) xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-            }
-        })
-        .done(function(response) {
-            console.log('Course creation response:', response);
-            if (response && response.success) {
-                $('#addCourseModal').modal('hide');
-                $('#addCourseForm')[0].reset();
-
-                var successModal = `
-                    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content" style="border-radius: 16px; border: none; overflow: hidden;">
-                                <div class="modal-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none;">
-                                    <h5 class="modal-title" id="successModalLabel">
-                                        <i class="fas fa-check-circle me-2"></i>Success!
-                                    </h5>
-                                </div>
-                                <div class="modal-body text-center py-4">
-                                    <i class="fas fa-check-circle fa-3x mb-3" style="color: #10b981;"></i>
-                                    <p class="mb-0">${response.message}</p>
-                                </div>
-                                <div class="modal-footer" style="border-top: 1px solid #f1f5f9;">
-                                    <button type="button" class="btn" id="successOkBtn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border-radius: 8px; border: none;">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                $('body').append(successModal);
-                $('#successModal').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $('#successModal').modal('show');
-
-                $('#successOkBtn').on('click', function() {
-                    $('#successModal').modal('hide');
-                });
-
-                $('#successModal').on('hidden.bs.modal', function() {
-                    $(this).remove();
-                    refreshCourses();
-                    updateCourseCount();
-                });
-
-                setTimeout(function() {
-                    if ($('#successModal').hasClass('show')) {
-                        $('#successModal').modal('hide');
-                    }
-                }, 3000);
-
-            } else {
-                console.log('Course creation failed:', response);
-                showTeacherAlert('danger', (response && response.message) ? response.message : 'Failed to create course. Please try again.');
-            }
-        })
-        .fail(function(xhr, status, error) {
-            let errorMessage = 'An error occurred. Please try again.';
-            if (status === 'timeout') errorMessage = 'Request timed out. Please check your connection and try again.';
-            else if (xhr.status === 0) errorMessage = 'Network error. Please check your connection.';
-            else if (xhr.status >= 500) errorMessage = 'Server error. Please try again later.';
-            else if (xhr.status === 404) errorMessage = 'Course creation endpoint not found. Please contact support.';
-            else {
-                try { const errorResponse = JSON.parse(xhr.responseText); if (errorResponse && errorResponse.message) errorMessage = errorResponse.message; } catch (e) {}
-            }
-            showTeacherAlert('danger', errorMessage);
-        })
-        .always(function() {
-            submitBtn.prop('disabled', false).html(originalText);
-        });
-    });
-    
-    function showTeacherAlert(type, message) {
-        var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert" style="border-radius: 12px; border: none;">' +
-            '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle') + ' me-2"></i>' +
-            message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-            '</div>';
-        $('#teacher-alert-container').html(alertHtml);
-        var hideDelay = type === 'success' ? 5000 : 8000;
-        setTimeout(function() { $('#teacher-alert-container .alert').fadeOut(); }, hideDelay);
-    }
-    
-    function refreshCourses() {
-        $.ajax({ url: '<?= base_url('course/getTeacherCourses') ?>', type: 'GET', dataType: 'json', timeout: 5000 })
-        .done(function(response) {
-            if (response && response.success) {
-                updateCoursesList(response.courses || []);
-                updateCourseCount();
-            } else {
-                showTeacherAlert('warning', 'Failed to load courses data.');
-            }
-        })
-        .fail(function(xhr, status, error) {
-            showTeacherAlert('danger', 'Failed to refresh courses. Please try again.');
-        });
-    }
-    
-    function updateCoursesList(courses) {
-        var coursesList = $('#teacher-courses-list');
-        if (courses.length === 0) {
-            coursesList.html('<div class="empty-state">' +
-                '<i class="fas fa-book"></i>' +
-                '<p class="mb-1 fw-bold">No courses created yet</p>' +
-                '<p class="small">Click "Add New Course" to create your first course!</p>' +
-                '</div>');
-        } else {
-            var coursesHtml = '<div class="list-group list-group-flush">';
-            courses.forEach(function(course) {
-                coursesHtml += '<div class="list-group-item list-item-custom">' +
-                    '<div class="d-flex justify-content-between align-items-start">' +
-                    '<div class="flex-grow-1">' +
-                    '<h6 class="mb-2 fw-bold" style="color: #1e293b;">' + course.course_name + '</h6>' +
-                    '<p class="mb-2 text-muted"><strong>Code:</strong> ' + course.course_code + '</p>' +
-                    '<p class="mb-2">' + (course.description || 'No description') + '</p>' +
-                    '<div class="d-flex gap-3 text-muted small">' +
-                    '<span><i class="fas fa-book-open me-1"></i> ' + (course.units || 3) + ' Units</span>' +
-                    '<span><i class="fas fa-user-graduate me-1"></i> ' + (course.students || 0) + ' Students</span>' +
-                    '<span><i class="fas fa-calendar me-1"></i> ' + (course.created_at || 'N/A') + '</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '<span class="badge-custom bg-success">' + (course.status || 'Active') + '</span>' +
-                    '</div>' +
-                    '</div>';
-            });
-            coursesHtml += '</div>';
-            coursesList.html(coursesHtml);
-        }
-    }
-    
-    function updateCourseCount() {
-        var courseCount = $('#teacher-courses-list .list-group-item').length;
-        $('.stats-card:first h2').text(courseCount);
-    }
 });
 
-// Refresh function for onclick
+// Teacher dashboard functions
 function refreshCourses() {
     $.ajax({ 
         url: '<?= base_url('course/getTeacherCourses') ?>', 
@@ -970,47 +996,27 @@ function refreshCourses() {
     })
     .done(function(response) {
         if (response && response.success) {
-            updateCoursesList(response.courses || []);
-            updateCourseCount();
+            showTeacherAlert('success', 'Courses refreshed successfully!');
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
         }
+    })
+    .fail(function() {
+        showTeacherAlert('danger', 'Failed to refresh courses. Please try again.');
     });
-    
-    function updateCoursesList(courses) {
-        var coursesList = $('#teacher-courses-list');
-        if (courses.length === 0) {
-            coursesList.html('<div class="empty-state">' +
-                '<i class="fas fa-book"></i>' +
-                '<p class="mb-1 fw-bold">No courses created yet</p>' +
-                '<p class="small">Click "Add New Course" to create your first course!</p>' +
-                '</div>');
-        } else {
-            var coursesHtml = '<div class="list-group list-group-flush">';
-            courses.forEach(function(course) {
-                coursesHtml += '<div class="list-group-item list-item-custom">' +
-                    '<div class="d-flex justify-content-between align-items-start">' +
-                    '<div class="flex-grow-1">' +
-                    '<h6 class="mb-2 fw-bold" style="color: #1e293b;">' + course.course_name + '</h6>' +
-                    '<p class="mb-2 text-muted"><strong>Code:</strong> ' + course.course_code + '</p>' +
-                    '<p class="mb-2">' + (course.description || 'No description') + '</p>' +
-                    '<div class="d-flex gap-3 text-muted small">' +
-                    '<span><i class="fas fa-book-open me-1"></i> ' + (course.units || 3) + ' Units</span>' +
-                    '<span><i class="fas fa-user-graduate me-1"></i> ' + (course.students || 0) + ' Students</span>' +
-                    '<span><i class="fas fa-calendar me-1"></i> ' + (course.created_at || 'N/A') + '</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '<span class="badge-custom bg-success">' + (course.status || 'Active') + '</span>' +
-                    '</div>' +
-                    '</div>';
-            });
-            coursesHtml += '</div>';
-            coursesList.html(coursesHtml);
-        }
-    }
-    
-    function updateCourseCount() {
-        var courseCount = $('#teacher-courses-list .list-group-item').length;
-        $('.stats-card:first h2').text(courseCount);
-    }
+}
+
+function showTeacherAlert(type, message) {
+    var alertHtml = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert" style="border-radius: 16px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem;">
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+    $('#teacher-alert-container').html(alertHtml);
+    setTimeout(function() { $('#teacher-alert-container .alert').fadeOut(); }, 5000);
 }
 </script>
 <?= $this->endSection() ?>

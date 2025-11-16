@@ -169,19 +169,25 @@ if ($admin) {
         } elseif ($role === 'teacher') {
             $courseModel = new \App\Models\CourseModel();
             $enrollmentModel = new \App\Models\EnrollmentModel();
-            
+            $materialModel = new \App\Models\MaterialModel();
+
             $teacherId = $user['id'];
-            
+
             // Get courses created by this teacher
             $teacherCourses = $courseModel->getCoursesByTeacher($teacherId);
-            
+
             // Add student count for each course
+            $totalMaterials = 0;
             foreach ($teacherCourses as &$course) {
                 $course['students'] = $enrollmentModel->getCourseEnrollmentCount($course['course_id']);
                 $course['status'] = 'active';
+                // Count materials for this course
+                $materials = $materialModel->getMaterialsByCourse($course['course_id']);
+                $totalMaterials += count($materials);
             }
-            
+
             $data['teacherCourses'] = $teacherCourses;
+            $data['totalMaterials'] = $totalMaterials;
             $data['notifications'] = [
                 ['id' => 1, 'message' => 'New assignment submitted by John Doe', 'time' => '2 hours ago', 'type' => 'assignment'],
                 ['id' => 2, 'message' => 'Student Sarah Wilson needs help with project', 'time' => '4 hours ago', 'type' => 'help'],
