@@ -996,132 +996,8 @@
       </div>
     </nav>
   <?php else: ?>
-    <!-- Sidebar Overlay for Mobile -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Sidebar -->
-    <div class="sidebar-wrapper" id="sidebar">
-      <!-- Sidebar Header -->
-      <div class="sidebar-header">
-        <a href="<?= base_url('/dashboard') ?>" class="sidebar-brand">
-          <i class="fas fa-rocket"></i>
-          <span>ITE311-VISAYAS</span>
-        </a>
-        <button class="sidebar-toggle" id="sidebarToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-
-      <!-- User Profile -->
-      <div class="sidebar-user">
-        <div class="user-profile">
-          <div class="user-avatar-sidebar">
-            <?= strtoupper(substr(session()->get('userEmail'), 0, 1)) ?>
-          </div>
-          <div class="user-info-sidebar">
-            <div class="user-name-sidebar"><?= session()->get('userName') ?? 'User' ?></div>
-            <div class="user-email-sidebar"><?= session()->get('userEmail') ?></div>
-            <span class="user-role-badge <?= session()->get('userRole') ?>">
-              <?= ucfirst(session()->get('userRole')) ?>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Navigation -->
-      <nav class="sidebar-nav">
-        <ul style="list-style: none; padding: 0; margin: 0;">
-          <!-- Main Navigation -->
-          <div class="nav-section-title">Main</div>
-          
-          <li class="nav-item-sidebar">
-            <a href="<?= base_url('/dashboard') ?>" 
-               class="nav-link-sidebar <?= uri_string() === 'dashboard' ? 'active' : '' ?>">
-              <span class="nav-icon"><i class="fas fa-th-large"></i></span>
-              <span class="nav-text">Dashboard</span>
-            </a>
-          </li>
-
-          <!-- Role-based Navigation: ADMIN -->
-          <?php if (session()->get('userRole') === 'admin'): ?>
-            <div class="nav-section-title">Administration</div>
-            
-            <li class="nav-item-sidebar">
-              <a href="<?= base_url('/student/grades') ?>" 
-                 class="nav-link-sidebar <?= strpos(uri_string(), 'student/grades') !== false ? 'active' : '' ?>">
-                <span class="nav-icon"><i class="fas fa-star"></i></span>
-                <span class="nav-text">Grades</span>
-              </a>
-            </li>
-
-            <li class="nav-item-sidebar">
-              <a href="<?= base_url('/announcements') ?>" 
-                 class="nav-link-sidebar <?= uri_string() === 'announcements' ? 'active' : '' ?>">
-                <span class="nav-icon"><i class="fas fa-bullhorn"></i></span>
-                <span class="nav-text">Announcements</span>
-              </a>
-            </li>
-          <?php endif; ?>
-        </ul>
-      </nav>
-
-      <!-- Sidebar Footer -->
-      <div class="sidebar-footer">
-        <a href="<?= base_url('/logout') ?>" class="logout-btn-sidebar">
-          <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span>
-          <span class="nav-text">Logout</span>
-        </a>
-      </div>
-    </div>
+    <?= $this->include('template/header') ?>
   <?php endif; ?>
-
-
-  <!-- Page Content -->
-  <main class="<?= session()->get('isLoggedIn') ? 'full-width' : 'container my-5 flex-grow-1' ?>">
-    <?php if (session()->get('isLoggedIn')): ?>
-      <!-- Top Bar for logged-in users -->
-      <div class="top-bar">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <button class="mobile-toggle" id="mobileToggle">
-            <i class="fas fa-bars"></i>
-          </button>
-          <h1><?= $this->renderSection('title') ?></h1>
-        </div>
-        
-        <div class="top-bar-actions">
-          <!-- Notification Bell -->
-          <div class="dropdown">
-            <button class="notification-bell-topbar" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-bell"></i>
-              <span id="notificationBadge" class="notification-badge-topbar" style="display:none;">0</span>
-            </button>
-            
-            <ul class="dropdown-menu dropdown-menu-end notification-dropdown-menu" aria-labelledby="notificationDropdown">
-              <li class="notification-dropdown-header">
-                <h6>
-                  <i class="fas fa-bell"></i>
-                  Notifications
-                </h6>
-                <button class="notification-action-btn" id="refreshNotifications">
-                  <i class="fas fa-sync-alt"></i>
-                </button>
-              </li>
-              
-              <div class="notification-body" id="notificationBody">
-                <div class="notification-empty">
-                  <i class="fas fa-bell-slash"></i>
-                  <p><strong>No notifications</strong></p>
-                  <p class="small">You're all caught up!</p>
-                </div>
-              </div>
-            </ul>
-          </div>
-        </div>
-      </div>
-    <?php endif; ?>
-
-    <?= $this->renderSection('content') ?>
-  </main>
 
 
   <?php
@@ -1417,3 +1293,6 @@
   <?php endif; ?>
 
   <?= $this->renderSection('scripts') ?>
+
+</body>
+</html>
